@@ -1,0 +1,33 @@
+{
+  "name": "clean-architecture-for-nodejs",
+  "version": "1.0.0",
+  "description": "My Node.JS project based on Clean architecture",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/dthphuong1/clean-architecture-for-nodejs.git"
+  },
+  "keywords": [
+    "nodejs",
+    "clean-architecture"
+  ],
+  "author": "Phuong Duong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/dthphuong1/clean-architecture-for-nodejs/issues"
+  },
+  "homepage": "https://gitlab.com/dthphuong1/clean-architecture-for-nodejs#README",
+  "dependencies": {
+    "async": "^2.6.0",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "formidable": "^1.1.1",
+    "jsonwebtoken": "^8.1.1",
+    "mongoose": "^5.0.3",
+    "request": "^2.83.0",
+    "underscore": "^1.8.3"
+  }
+}
