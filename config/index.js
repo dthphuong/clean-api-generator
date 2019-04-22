@@ -4,6 +4,7 @@
  * configType = 1 is Production environment
  */
 
+var home = require("os").homedir();
 var configType = 0;
 
 switch (configType) {
@@ -12,7 +13,11 @@ switch (configType) {
             port: 3000,
             secret: '###FPO@secretJwT###',
             exptime: '3600',
-            worldUrl: 'http://202.78.227.73:2016',
+            base_url: 'http://base.url',
+            limiterMaxTime: 1 * 60 * 1000,
+            limiterMaxRequestNormal: 100,
+            limiterMaxRequestMedium: 10,
+            limiterMaxRequestHard: 1,
             noTokenUrls: ['/account/checkUid', '/account/oauth2', '/idiom/getAll']
         }
 
@@ -21,15 +26,34 @@ switch (configType) {
             port: 27017,
             name: 'childhub',
             username: '',
-            password: ''
+            password: '',
+            optional: ''
         }
+
+        exports.email = {
+            'resetUrl': 'http://base.url/reset-password?token=',
+            'emailAddress': 'reset@e.mail',
+            'emailPassword': 'password',
+            'smtpPort': 587,
+            'smtpHost': 'smtp.yandex.com'
+        }
+
+        exports.ffmpegPath = home + "/usr/bin/ffmpeg";
+        exports.ffprobePath = home + "/usr/bin/ffprobe";
+        exports.tempPhotoPath = home + "/upload/";
+        exports.defaultAvatar = "layout/images/user.png"
         break;
     case 1: // Production environment
         exports.server = {
             port: 3000,
             secret: '###FPO@secretJwT###',
-            exptime: '604800',
-            worldUrl: 'http://202.78.227.73:2016'
+            exptime: '3600',
+            base_url: 'http://base.url',
+            limiterMaxTime: 1 * 60 * 1000,
+            limiterMaxRequestNormal: 100,
+            limiterMaxRequestMedium: 10,
+            limiterMaxRequestHard: 1,
+            noTokenUrls: ['/account/checkUid', '/account/oauth2', '/idiom/getAll']
         }
 
         exports.database = {
@@ -37,7 +61,20 @@ switch (configType) {
             port: 27017,
             name: 'childhub',
             username: '',
-            password: ''
+            password: '',
+            optional: ''
         }
-        break;
+
+        exports.email = {
+            'resetUrl': 'http://base.url/reset-password?token=',
+            'emailAddress': 'reset@e.mail',
+            'emailPassword': 'password',
+            'smtpPort': 587,
+            'smtpHost': 'smtp.yandex.com'
+        }
+
+        exports.ffmpegPath = home + "/usr/bin/ffmpeg";
+        exports.ffprobePath = home + "/usr/bin/ffprobe";
+        exports.tempPhotoPath = home + "/upload/";
+        exports.defaultAvatar = "layout/images/user.png"
 }

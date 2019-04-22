@@ -1,25 +1,46 @@
 /**
- * Created by Phuong Duong on 09/02/2018
+ * Created by Phuong Duong on 05/09/2018
  */
-const config = require('../config');
-var jwt = require('jsonwebtoken');
+const config = require("../config");
+var jwt = require("jsonwebtoken");
 
-exports.encode = function(payload, exp) {
-    // console.log(payload);
-    // console.log(config.secret);
-    return jwt.sign(payload, config.secret, { expiresIn: parseInt(exp) });
+function encode(payload, exp) {
+  return jwt.sign(payload, config.server.secret, {
+    expiresIn: parseInt(exp)
+  });
 }
 
-exports.decode = function(token) {
-    var ret = {"status":0, "data":null, "error":null};
+function decode(token) {
+  var ret = {
+    "exitcode": 0,
+    "data": null,
+    "message": null
+  };
 
-    try {
-        ret.status = 1;
-        ret.data = jwt.verify(token, config.secret);
-    } catch(err) {
-        ret.status = 0;
-        ret.error = err.message;
+  try {
+    ret.exitcode = 1;
+    ret.data = jwt.verify(token, config.server.secret);
+  } catch (err) {
+    ret.error = err.message;
+
+    switch (err.name) {
+      case 'TokenExpiredError':
+        ret.exitcode = 901;
+        break;
+      case 'JsonWebTokenError':
+        ret.exitcode = 903;
+        break;
+      case 'NotBeforeError':
+        ret.exitcode = 904;
+        break;
+      default:
+        ret.exitcode = 0;
+        break;
     }
+  }
 
-    return ret;
+  return ret;
 }
+
+exports.encode = encode;
+exports.decode = decode;

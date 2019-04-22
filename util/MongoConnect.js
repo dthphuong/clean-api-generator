@@ -1,5 +1,5 @@
 /**
- * Created by Phuong Duong on 07/02/2018
+ * Created by Phuong Duong on 05/09/2018
  */
 'use strict'
 
@@ -8,8 +8,8 @@ global.config = require('../config');
 
 var db;
 
-exports.Connect = function(dbName) {
-    return new Promise(function(resolve, reject) {
+exports.Connect = function (dbName) {
+    return new Promise(function (resolve, reject) {
         if (db) {
             if (db.name == dbName) {
                 resolve(db);
@@ -24,10 +24,10 @@ exports.Connect = function(dbName) {
         // create connection string
         var connectionString = '';
         if (config.database.username == '' || config.database.password == '') {
-            connectionString = 'mongodb://' + config.database.host + ":" + config.database.port + "/" + dbName;
+            connectionString = 'mongodb://' + config.database.host + "/" + dbName + config.database.optional;
         } else {
-            connectionString = 'mongodb://' + config.database.username + ':' + config.database.password + '@' + 
-                                config.database.host + ":" + config.database.port + "/" + dbName;
+            connectionString = 'mongodb://' + config.database.username + ':' + config.database.password + '@' +
+                config.database.host + "/" + dbName + config.database.optional;
         }
 
         // connect to database
