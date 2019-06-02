@@ -1,35 +1,31 @@
 {
-  "name": "clean-architecture-for-nodejs",
+  "name": "clean-api-generate",
   "version": "1.0.0",
-  "description": "My Node.JS project based on Clean architecture",
-  "main": "server.js",
+  "description": "The useful tool to generate RESTful API with Clean Architecture",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/dthphuong1/clean-architecture-for-nodejs.git"
+    "url": "git+https://gitlab.com/fpo-project/clean-api-generate.git"
   },
   "keywords": [
-    "nodejs",
-    "clean-architecture"
+    "fpo",
+    "api",
+    "genrate",
+    "tool",
+    "nodejs"
   ],
   "author": "Phuong Duong",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/dthphuong1/clean-architecture-for-nodejs/issues"
+    "url": "https://gitlab.com/fpo-project/clean-api-generate/issues"
   },
-  "homepage": "https://gitlab.com/dthphuong1/clean-architecture-for-nodejs#README",
+  "homepage": "https://gitlab.com/fpo-project/clean-api-generate#readme",
   "dependencies": {
-    "async": "^2.6.0",
-    "body-parser": "^1.18.2",
-    "express": "^4.16.2",
-    "express-rate-limit": "^3.4.1",
-    "formidable": "^1.1.1",
-    "html5-to-pdf": "^3.1.3",
-    "jsonwebtoken": "^8.1.1",
-    "mongoose": "^5.0.3",
-    "request": "^2.83.0",
-    "underscore": "^1.8.3"
+    "async": "^3.0.1",
+    "mongodb": "^3.2.6",
+    "underscore": "^1.9.1"
   }
 }

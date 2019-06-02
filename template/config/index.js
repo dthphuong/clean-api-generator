@@ -24,7 +24,7 @@ switch (configType) {
         exports.database = {
             host: 'localhost',
             port: 27017,
-            name: 'childhub',
+            name: 'demo',
             username: '',
             password: '',
             optional: ''
@@ -59,7 +59,7 @@ switch (configType) {
         exports.database = {
             host: 'localhost',
             port: 27017,
-            name: 'childhub',
+            name: 'demo',
             username: '',
             password: '',
             optional: ''
