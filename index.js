@@ -8,11 +8,11 @@ var yargs = require('yargs'),
 
 //========================================CONNECT DB====================================================
 var connectionString = '';
-if (argv.username == undefined || argv.password == undefined) {
-    connectionString = 'mongodb://' + argv.host + "/" + argv.nameDb + argv.optional;
+if (argv.username == undefined || argv.password == undefined || argv.optional == undefined) {
+    connectionString = 'mongodb://' + argv.host + "/" + argv.nameDb;
 } else {
-    connectionString = 'mongodb://' + argv.username + ':' + argv.password  + '@' +
-    argv.host + "/" + argv.dbName + argv.optional;
+    connectionString = 'mongodb://' + argv.username + ':' + argv.password + '@' +
+        argv.host + "/" + argv.dbName + argv.optional;
 }
 mongoose.connect(connectionString)
 //======================================#END CONNECT DB=====================================================
@@ -173,3 +173,7 @@ mongoose.connection.on('open', function (ref) {
     });
 })
 //================================#END GENERATE DATA_PROVIDER========================================
+
+setTimeout((function () {
+    return process.abort();
+}), 5000);
