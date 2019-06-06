@@ -6,9 +6,6 @@ var _ = require('underscore'),
 var yargs = require('yargs'),
     argv = yargs.argv;
 
-var nameDb = argv._.toString()
-console.log('Host' + argv.host )
-
 //========================================CONNECT DB====================================================
 var connectionString = 'mongodb://' + argv.username + ':' + argv.password + '@' +
 argv.host + "/" + argv.name + argv.optional;
