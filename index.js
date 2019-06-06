@@ -8,7 +8,7 @@ var yargs = require('yargs'),
 
 //========================================CONNECT DB====================================================
 var connectionString = 'mongodb://' + argv.username + ':' + argv.password + '@' +
-argv.host + "/" + argv.name + argv.optional;
+    argv.host + "/" + argv.name + argv.optional;
 
 mongoose.connect(connectionString)
     .then(() => {
@@ -32,13 +32,7 @@ var cmd3 = 'mv use_case core';
 IO.execute(cmd1, cmd2, cmd3);
 
 mongoose.connection.on('open', function (ref) {
-    console.log('Connected to mongo server.');
-    //trying to get collection names
     mongoose.connection.db.listCollections().toArray(function (err, names) {
-        console.log(names)
-        console.log('-------------------')
-        console.log('-------------------')
-
         _.each(names, (item) => {
             db1 = 'touch' + ' ' + 'routes' + '/' + item.name + '.js'
             IO.execute(db1)
@@ -71,21 +65,18 @@ mongoose.connection.on('open', function (ref) {
                     typeList = _.rest(_.map(keys, (k) => {
                         return k + ': ' + IO.mongoTypeOf(it[k])
                     }))
-                    let demoCoreEntity = fs.readFileSync('demo/core.js').toString()
-                        .replace('[[RESET_CODE]]', IO.toProperCase(item.name) + 'Schema')
-                        .replace('[[RESET_CODE1]]', IO.toProperCase(item.name) + 'Schema')
-                        .replace('[[RESET_CODE2]]', IO.toProperCase(item.name) + 'Schema')
-                        .replace('[[NAMEDB]]', item.name)
-                        .replace('[[NAME]]', IO.toProperCase(item.name))
-                        .replace('[[NAME1]]', IO.toProperCase(item.name))
-                        .replace('[[NAME_ENTITY]]', IO.toProperCase(item.name) + 'Entity')
-                        .replace('[[RESET_TYPE]]', typeList)
+                    let demoCoreEntity = fs.readFileSync('demo/entity.js').toString()
+                        .replace(new RegExp('NAMESCHEMA', 'g'), IO.toProperCase(item.name) + 'Schema')
+                        .replace(new RegExp('ENTITY', 'g'), IO.toProperCase(item.name))
+                        .replace('NAMEDB', item.name)
+                        .replace('ENTITNAME', IO.toProperCase(item.name) + 'Entity')
+                        .replace('TYPE', typeList)
                     fs.writeFileSync('core/entity/' + item.name + '.js', demoCoreEntity.toString());
                 })
             })
         })
         typeList = _.map(names, (item) => {
-            return (IO.toProperCase(item.name) + ' = ' + ' require("' + './' + item.name + '"' + ')')
+            return (IO.toProperCase(item.name) + ' = ' + " require('" + './' + item.name + "'" + ')')
         })
         router = _.map(names, (item) => {
             return 'exports.' + IO.toProperCase(item.name) + 'Entity' + ' = ' + IO.toProperCase(item.name) + '.' + IO.toProperCase(item.name) + 'Entity;'
@@ -107,11 +98,8 @@ mongoose.connection.on('open', function (ref) {
     mongoose.connection.db.listCollections().toArray(function (err, names) {
         _.each(names, (item) => {
             let demoCoreUsercase = fs.readFileSync('demo/use_case.js').toString()
-                .replace('[[DBNAME]]', item.name)
-                .replace('[[NAMEID1]]', item.name + 'Id')
-                .replace('[[NAMEID2]]', item.name + 'Id')
-                .replace('[[NAMEID3]]', item.name + 'Id')
-                .replace('[[NAMEID4]]', item.name + 'Id')
+                .replace('DBNAME', item.name)
+                .replace(new RegExp('NAMEID', 'g'), item.name + 'Id')
             fs.writeFileSync('core/use_case/' + item.name + '.js', demoCoreUsercase.toString());
         })
         console.log('Create file use_case successful')
@@ -126,20 +114,12 @@ mongoose.connection.on('open', function (ref) {
     mongoose.connection.db.listCollections().toArray(function (err, names) {
         _.each(names, (item) => {
             let demoRoutes = fs.readFileSync('demo/routes.js').toString()
-                .replace('[[DBNAME]]', item.name)
-                .replace('[[DBNAME1]]', item.name)
-                .replace('[[DBNAME2]]', item.name)
-                .replace('[[NAMEID1]]', item.name + 'Id')
-                .replace('[[NAMEID2]]', item.name + 'Id')
-                .replace('[[NAMEID3]]', item.name + 'Id')
-                .replace('[[NAMEID4]]', item.name + 'Id')
-                .replace('[[NAMEID5]]', item.name + 'Id')
-                .replace('[[NAMEID6]]', item.name + 'Id')
-                .replace('[[NAMEID7]]', item.name + 'Id')
+                .replace(new RegExp('DBNAME', 'g'), item.name)
+                .replace(new RegExp('NAMEID', 'g'), item.name + 'Id')
             fs.writeFileSync('routes/' + item.name + '.js', demoRoutes.toString());
         })
         typeList = _.map(names, (item) => {
-            return (IO.toProperCase(item.name) + ' = ' + ' require("' + './' + item.name + '"' + ')')
+            return (IO.toProperCase(item.name) + ' = ' + " require('" + './' + item.name + "'" + ')')
         })
         router = _.map(names, (item) => {
             return "app.post('/" + item.name + "/getAll'," + IO.toProperCase(item.name) + ".getAll);" +
@@ -182,28 +162,11 @@ mongoose.connection.on('open', function (ref) {
                     // typeList = typeList.toString().replace(/',\n'/g, '\n,')
                     update = update.toString().replace(/,/g, ';')
                     let demoDataprovider = fs.readFileSync('demo/data_provider.js').toString()
-                        .replace('[[DBENTITY]]', IO.toProperCase(item.name) + 'Entity')
-                        .replace('[[DBENTITY1]]', IO.toProperCase(item.name) + 'Entity')
-                        .replace('[[DBENTITY2]]', IO.toProperCase(item.name) + 'Entity')
-                        .replace('[[DBENTITY3]]', IO.toProperCase(item.name) + 'Entity')
-                        .replace('[[DBENTITY4]]', IO.toProperCase(item.name) + 'Entity')
-                        .replace('[[DBENTITY5]]', IO.toProperCase(item.name) + 'Entity')
-                        .replace('[[NAMEID]]', item.name + 'Id')
-                        .replace('[[NAMEID1]]', item.name + 'Id')
-                        .replace('[[NAMEID2]]', item.name + 'Id')
-                        .replace('[[NAMEID3]]', item.name + 'Id')
-                        .replace('[[NAMEID4]]', item.name + 'Id')
-                        .replace('[[NAMEID5]]', item.name + 'Id')
-                        .replace('[[NAMEID6]]', item.name + 'Id')
-                        .replace('[[NAMEID7]]', item.name + 'Id')
-                        .replace('[[DBNAME]]', IO.toProperCase(item.name))
-                        .replace('[[DBNAME1]]', IO.toProperCase(item.name))
-                        .replace('[[DBNAME2]]', IO.toProperCase(item.name))
-                        .replace('[[DBNAME3]]', IO.toProperCase(item.name))
-                        .replace('[[DBNAME4]]', IO.toProperCase(item.name))
-                        .replace('[[RESET_TYPE]]', typeList)
-                        .replace('[[RESET_TYPE1]]', typeList)
-                        .replace('[[UPDATE]]', update)
+                        .replace(new RegExp('DBENTITY', 'g'), IO.toProperCase(item.name) + 'Entity')
+                        .replace(new RegExp('NAMEID', 'g'), item.name + 'Id')
+                        .replace(new RegExp('DBNAME', 'g'), IO.toProperCase(item.name))
+                        .replace(new RegExp('DATA', 'g'), typeList)
+                        .replace('UPDATE', update)
                     fs.writeFileSync('data_provider/' + item.name + '.js', demoDataprovider.toString());
                 })
             })

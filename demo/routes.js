@@ -1,4 +1,4 @@
-var UseCase = require('../core/use_case/[[DBNAME]]'),
+var UseCase = require('../core/use_case/DBNAME'),
     util = require('../util'),
     config = require('../config'),
     jwt = require('../util/JWT'),
@@ -26,8 +26,8 @@ exports.getAll = function (req, res, next) {
 
 
 exports.getById = function (req, res, next) {
-    var [[NAMEID1]] = req.body.[[NAMEID2]]
-    UseCase.getById([[NAMEID3]], function (err, result) {
+    var NAMEID = req.body.NAMEID
+    UseCase.getById(NAMEID, function (err, result) {
         if (err) {
             return res.send({
                 exitcode: util.ErrorHandle.getErrorCode(err),
@@ -56,7 +56,7 @@ exports.create = function (req, res, next) {
         return res.send({
             exitcode: 1,
             data: {
-                [[NAMEID4]]: result._id,
+                NAMEID: result._id,
             },
             message: 'Create successful',
         });
@@ -64,8 +64,8 @@ exports.create = function (req, res, next) {
 }
 
 exports.delete = function (req, res, next) {
-    var [[NAMEID5]] = req.body.[[NAMEID6]];
-    UseCase.delete([[NAMEID7]], function (err, result) {
+    var NAMEID = req.body.NAMEID;
+    UseCase.delete(NAMEID, function (err, result) {
         if (err) {
             return res.send({
                 exitcode: util.ErrorHandle.getErrorCode(err),
@@ -82,8 +82,8 @@ exports.delete = function (req, res, next) {
 }
 
 exports.update = function (req, res, next) {
-    var [[DBNAME1]] = req.body;
-    UseCase.update([[DBNAME2]], function (err, result) {
+    var DBNAME = req.body;
+    UseCase.update(DBNAME, function (err, result) {
         if (err) {
             return res.send({
                 exitcode: util.ErrorHandle.getErrorCode(err),

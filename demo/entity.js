@@ -5,12 +5,12 @@ require('mongoose-double')(mongoose);
 var SchemaTypes = mongoose.Schema.Types;
 
 // Create a Mongoose Schema
-var [[RESET_CODE]] = new Schema(
-        {[[RESET_TYPE]]},
+var NAMESCHEMA = new Schema(
+        {TYPE},
 {
         versionKey: false
 });
 
 // Register the schema
-var [[NAME]] = mongoose.model("[[RESET_CODE2]]", [[RESET_CODE1]], "[[NAMEDB]]");
-exports.[[NAME_ENTITY]]= [[NAME1]];
+var ENTITY = mongoose.model("NAMESCHEMA", NAMESCHEMA, "NAMEDB");
+exports.ENTITNAME= ENTITY;
