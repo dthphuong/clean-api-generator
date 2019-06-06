@@ -7,20 +7,11 @@ var yargs = require('yargs'),
     argv = yargs.argv;
 
 var nameDb = argv._.toString()
-
-var host =  nameDb.split(',')[0].split(':')[1] +':'+nameDb.split(',')[0].split(':')[2]
-
-var name = nameDb.split(',')[1].split(':')[1]
-
-var username = nameDb.split(',')[2].split(':')[1]
-
-var password = nameDb.split(',')[3].split(':')[1]
-
-var optional = nameDb.split(',')[4].split(':')[1]
+console.log('Host' + argv.host )
 
 //========================================CONNECT DB====================================================
-var connectionString = 'mongodb://' + username + ':' + password + '@' +
-    host + "/" + name + optional;
+var connectionString = 'mongodb://' + argv.username + ':' + argv.password + '@' +
+argv.host + "/" + argv.name + argv.optional;
 
 mongoose.connect(connectionString)
     .then(() => {
