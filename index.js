@@ -7,19 +7,14 @@ var yargs = require('yargs'),
     argv = yargs.argv;
 
 //========================================CONNECT DB====================================================
-var connectionString = 'mongodb://' + argv.username + ':' + argv.password + '@' +
-    argv.host + "/" + argv.name + argv.optional;
-
+var connectionString = '';
+if (argv.username == undefined || argv.password == undefined) {
+    connectionString = 'mongodb://' + argv.host + "/" + argv.nameDb + argv.optional;
+} else {
+    connectionString = 'mongodb://' + argv.username + ':' + argv.password  + '@' +
+    argv.host + "/" + argv.dbName + argv.optional;
+}
 mongoose.connect(connectionString)
-    .then(() => {
-        db = mongoose.connection;
-        console.log('MongoDb connection created to [' + db.name + ']');
-        resolve(db);
-    })
-    .catch(err => {
-        console.log('Error creating MongoDb connection: ' + err);
-        reject(err);
-    });
 //======================================#END CONNECT DB=====================================================
 
 
@@ -32,7 +27,10 @@ var cmd3 = 'mv use_case core';
 IO.execute(cmd1, cmd2, cmd3);
 
 mongoose.connection.on('open', function (ref) {
+    console.log('Connected to mongo server.');
+    //trying to get collection names
     mongoose.connection.db.listCollections().toArray(function (err, names) {
+
         _.each(names, (item) => {
             db1 = 'touch' + ' ' + 'routes' + '/' + item.name + '.js'
             IO.execute(db1)
