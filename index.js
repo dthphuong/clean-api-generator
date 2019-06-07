@@ -202,9 +202,6 @@ function genrateFile(collectionName) {
 }
 
 function genrateEntity(collectionName, data) {
-    // _.each(collectionName, (item) => {
-    db2 = 'touch' + ' ' + 'core/entity/' + collectionName + '.js'
-    IO.execute(db2)
     _.each(data, (it) => {
         let keys = _.keys(it)
         typeList = _.rest(_.map(keys, (k) => {
@@ -235,10 +232,6 @@ function genrateEntity(collectionName, data) {
 
 function genrateUsecase(collectionName) {
     // _.each(collectionName, (item) => {
-    db = 'touch' + ' ' + 'core/use_case/' + collectionName + '.js'
-    IO.execute(db)
-    // })
-    // _.each(collectionName, (item) => {
     let demoCoreUsercase = fs.readFileSync('demo/use_case.js').toString()
         .replace('DBNAME', collectionName)
         .replace(new RegExp('NAMEID', 'g'), collectionName + 'Id')
@@ -247,8 +240,6 @@ function genrateUsecase(collectionName) {
 }
 
 function genrateRoutes(collectionName) {
-    var db = 'touch' + ' ' + 'routes' + '/' + collectionName + '.js';
-    IO.execute(db)
     let demoRoutes = fs.readFileSync('demo/routes.js').toString()
         .replace(new RegExp('DBNAME', 'g'), collectionName)
         .replace(new RegExp('NAMEID', 'g'), collectionName + 'Id')
@@ -301,8 +292,8 @@ var data = [{
     participantId: '5cd7902dc75c2b5c00f3d80c',
     eventId: '5ce26ec5754486030d01550f'
 }]
-// genrateFile(collectionName)
-// genrateEntity(collectionName, data)
-// genrateUsecase(collectionName)
-// genrateRoutes(collectionName)
-// genrateDataprovider(collectionName, data)
+genrateFile(collectionName)
+genrateEntity(collectionName, data)
+genrateUsecase(collectionName)
+genrateRoutes(collectionName)
+genrateDataprovider(collectionName, data)
