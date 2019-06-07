@@ -149,7 +149,34 @@ exports.exportToPDF = async (filename, htmlData) => {
     console.log("DONE: export pdf file");
 };
 
-exports.execute = async (commands1, commands2, commands3, commands4, commands5, commands6) => {
+exports.execute = async (commands1) => {
+    await exec(commands1, (err, stdout, stderr) => {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log(stdout, stderr)
+        }
+    });
+}
+
+exports.execute2 = async (commands1, commands2) => {
+    await exec(commands1, (err, stdout, stderr) => {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log(stdout, stderr)
+        }
+    });
+    await exec(commands2, (err, stdout, stderr) => {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log(stdout, stderr)
+        }
+    });
+}
+
+exports.execute4 = async (commands1, commands2, commands3, commands4) => {
     await exec(commands1, (err, stdout, stderr) => {
         if (err) {
             console.log(err)
@@ -178,27 +205,11 @@ exports.execute = async (commands1, commands2, commands3, commands4, commands5, 
             console.log(stdout, stderr)
         }
     });
-    await exec(commands5, (err, stdout, stderr) => {
-        if (err) {
-            console.log(err)
-        } else {
-            console.log(stdout, stderr)
-        }
-    });
-    await exec(commands6, (err, stdout, stderr) => {
-        if (err) {
-            console.log(err)
-        } else {
-            console.log(stdout, stderr)
-        }
-    });
 }
 
 function isJSON(json) {
     json = JSON.stringify(json)
-    if (/^[\],:{}\s]*$/.test(json.replace(/\\["\\\/bfnrtu]/g, '@').
-        replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
-        replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
+    if (/^[\],:{}\s]*$/.test(json.replace(/\\["\\\/bfnrtu]/g, '@').replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').replace(/(?:^|:|,)(?:\s*\[)+/g, ''))) {
         return true;
     }
     return false;

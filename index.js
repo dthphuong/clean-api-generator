@@ -176,38 +176,28 @@ var yargs = require('yargs'),
 //================================#END GENERATE DATA_PROVIDER========================================
 
 
-function genrateFile(collectionName) {
-    var cmd1 = 'mkdir routes core data_provider entity use_case';
-    var cmd2 = 'mv entity core';
-    var cmd3 = 'mv use_case core';
-
-    IO.execute(cmd1, cmd2, cmd3);
-
+function generateFile(collectionName) {
+    cmd1 = 'mkdir routes core data_provider entity use_case';
+    cmd2 = 'mv entity core';
+    cmd3 = 'mv use_case core';
+    IO.execute(cmd1);
+    IO.execute2(cmd2, cmd3)
     // _.each(collectionName, (item) => {
-    db1 = 'touch' + ' ' + 'routes' + '/' + collectionName + '.js'
-    IO.execute(db1)
-    // })
-
-    // _.each(collectionName, (item) => {
-    db2 = 'touch' + ' ' + 'core/entity/' + collectionName + '.js'
-    db21 = 'touch' + ' ' + 'core/use_case/' + collectionName + '.js'
-    IO.execute(cmd1, db2, db21)
-    // })
-
-    // _.each(collectionName, (item) => {
-    db3 = 'touch' + ' ' + 'data_provider' + '/' + collectionName + '.js'
-    IO.execute(db3)
+        cmd4 = 'touch' + ' ' + 'routes' + '/' + collectionName + '.js'
+        cmd5 = 'touch' + ' ' + 'core/entity/' + collectionName + '.js'
+        cmd6 = 'touch' + ' ' + 'core/use_case/' + collectionName + '.js'
+        cmd7 = 'touch' + ' ' + 'data_provider' + '/' + collectionName + '.js'
+        IO.execute4(cmd4, cmd5, cmd6, cmd7)
     // })
     console.log('Create file model file successful')
 }
 
-function genrateEntity(collectionName, data) {
+function generateEntity(collectionName, data) {
     _.each(data, (it) => {
         let keys = _.keys(it)
         typeList = _.rest(_.map(keys, (k) => {
             return k + ': ' + IO.mongoTypeOf(it[k])
         }))
-        console.log(typeList)
         let demoCoreEntity = fs.readFileSync('demo/entity.js').toString()
             .replace(new RegExp('NAMESCHEMA', 'g'), IO.toProperCase(collectionName) + 'Schema')
             .replace(new RegExp('ENTITY', 'g'), IO.toProperCase(collectionName))
@@ -216,30 +206,25 @@ function genrateEntity(collectionName, data) {
             .replace('TYPE', typeList)
         fs.writeFileSync('core/entity/' + collectionName + '.js', demoCoreEntity.toString());
     })
-    // })
-    // typeList = _.map(collectionName, (item) => {
     var typeList = (IO.toProperCase(collectionName) + ' = ' + " require('" + './' + collectionName + "'" + ')')
-    // })
-    // router = _.map(collectionName, (item) => {
     var router = 'exports.' + IO.toProperCase(collectionName) + 'Entity' + ' = ' + IO.toProperCase(collectionName) + '.' + IO.toProperCase(collectionName) + 'Entity;'
-    // })
     router = router.toString().replace(/;,/g, ';')
     let demoIndex = fs.readFileSync('demo/coreEntiryIndex.js').toString()
         .replace('[[ROUTES]]', typeList)
         .replace('[[ROUTESENTITY]]', router)
     fs.writeFileSync('core/entity/index.js', demoIndex.toString());
+    console.log('GenerateEntity successful')
 }
 
-function genrateUsecase(collectionName) {
-    // _.each(collectionName, (item) => {
+function generateUsecase(collectionName) {
     let demoCoreUsercase = fs.readFileSync('demo/use_case.js').toString()
         .replace('DBNAME', collectionName)
         .replace(new RegExp('NAMEID', 'g'), collectionName + 'Id')
     fs.writeFileSync('core/use_case/' + collectionName + '.js', demoCoreUsercase.toString());
-    // })
+    console.log('GenerateUsecase successful')
 }
 
-function genrateRoutes(collectionName) {
+function generateRoutes(collectionName) {
     let demoRoutes = fs.readFileSync('demo/routes.js').toString()
         .replace(new RegExp('DBNAME', 'g'), collectionName)
         .replace(new RegExp('NAMEID', 'g'), collectionName + 'Id')
@@ -255,10 +240,10 @@ function genrateRoutes(collectionName) {
         .replace('[[ROUTES]]', typeList)
         .replace('[[ROUTESAPI]]', router)
     fs.writeFileSync('routes/index.js', demoIndex.toString());
+    console.log('GenerateRoutes successful')
 }
 
-function genrateDataprovider(collectionName, data) {
-    // _.each(collectionName, (item) => {
+function generateDataprovider(collectionName, data) {
     _.each(data, (it) => {
         let keys = _.keys(it);
         typeList = _.rest(_.map(keys, (k) => {
@@ -273,7 +258,6 @@ function genrateDataprovider(collectionName, data) {
             }
             return '((' + 'data.' + k + ' ==' + "''" + ' ||' + ' data.' + k + ' ==' + ' undefined)' + ' ?' + ' result[0].' + k + ' :' + ' data.' + k + ')'
         }))
-        // typeList = typeList.toString().replace(/',\n'/g, '\n,')
         update = update.toString().replace(/,/g, ';')
         let demoDataprovider = fs.readFileSync('demo/data_provider.js').toString()
             .replace(new RegExp('DBENTITY', 'g'), IO.toProperCase(collectionName) + 'Entity')
@@ -283,17 +267,31 @@ function genrateDataprovider(collectionName, data) {
             .replace('UPDATE', update)
         fs.writeFileSync('data_provider/' + collectionName + '.js', demoDataprovider.toString());
     })
-    // })
+    console.log('generateDataprovider successful')
 }
 
 var collectionName = 'user';
+
+// 'hall',
+// 'attendance',
+// 'user_group',
+// 'group',
+// 'event_participant',
+// 'participant',
+// 'template_hall',
+// 'event',
+// 'event_hall'
+
 var data = [{
     _id: '5ce26ec6754486030d015510',
     participantId: '5cd7902dc75c2b5c00f3d80c',
     eventId: '5ce26ec5754486030d01550f'
 }]
-genrateFile(collectionName)
-genrateEntity(collectionName, data)
-genrateUsecase(collectionName)
-genrateRoutes(collectionName)
-genrateDataprovider(collectionName, data)
+
+// Lưu ý chạy generateFile xong mới chạy cái function khác
+// generateFile(collectionName)
+// Khi chạy xong function generateFile thì khi chạy các function khác thì k cần chạy generateFile nữa
+// generateEntity(collectionName, data)
+// generateUsecase(collectionName)
+// generateRoutes(collectionName)
+// generateDataprovider(collectionName, data)
