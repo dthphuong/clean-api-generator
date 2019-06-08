@@ -6,7 +6,7 @@
 - [x] Get project and database info
 - [x] Generate folder structure
 - [x] Generate file `package.json`
-- [ ] Generate file `README.md`
+- [x] Generate file `README.md`
 - [ ] Generate file `.gitignore`
 - [ ] Generate file `server.js`
 - [ ] Generate files in `utils` folder

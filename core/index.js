@@ -61,6 +61,16 @@ function generatePackageJSON(root, projectInfo) {
     }
 }
 
+function generateREADME(root) {
+    try {
+        let readmeData = fs.readFileSync(__dirname + '/template/README.md');
+        fs.writeFileSync(root + '/README.md', readmeData);
+        console.log(success('✅ Generate `README.md` file successfully --> Next !!!'));
+    } catch (err) {
+        throw err;
+    }
+}
+
 exports.generateProjectStructure = function (root, inputData) {
     try {
         // Generate folder structure
@@ -78,7 +88,7 @@ exports.generateProjectStructure = function (root, inputData) {
         generatePackageJSON(root, inputData);
 
         // Generate file`README.md`
-
+        generateREADME(root);
 
         // Generate file`.gitignore`
 
@@ -94,6 +104,7 @@ exports.generateProjectStructure = function (root, inputData) {
 
         return 0;
     } catch (err) {
+        console.log(error('❌ ' + err));
         return 1;
     }
 }
