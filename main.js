@@ -2,26 +2,23 @@
  * Created by Phuong Duong on 07/06/2019
  */
 global._ = require('underscore');
-global.utils = require('./utils')
+global.utils = require('./utils');
+global.fs = require('fs');
 
+const core = require('./core');
 const MongoClient = require('mongodb').MongoClient;
-const readline = require('readline');
 const async = require('async');
 const chalk = require('chalk');
 const figlet = require('figlet');
 
+//#region _____DEFAULT_VARIABLE_____
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
-// ============================================================================================
-// ======================================DEFAULT VARIABLE======================================
-// ============================================================================================
-var ask = chalk.bold.red,
-    info = chalk.italic.white,
-    comment = chalk.bold.bgBlue.white;
+global.success = chalk.bold.green;
+global.info = chalk.italic.bold.blue;
+global.error = chalk.bold.red;
+global.warning = chalk.bold.yellow;
+global.comment = chalk.bold.bgBlue.white;
+global.announce = chalk.bold.bgCyan.white;
 
 var inputData = {
     // project variables
@@ -36,6 +33,7 @@ var inputData = {
     ],
     author: 'FPO Co.,Ltd',
     license: 'ISC',
+    output: './',
 
     // database variables
     host: 'localhost',
@@ -45,122 +43,71 @@ var inputData = {
     password: '',
     optional: ''
 };
-// ============================================================================================
-// ===================================#END DEFAULT VARIABLE====================================
-// ============================================================================================
+var root = '';
 
-
-// ============================================================================================
-// ========================================MAIN PROGRAM========================================
-// ============================================================================================
-console.clear();
-
-console.log(figlet.textSync('Clean  API  Generator', {
-    kerning: 'full'
-}));
-
-console.log(info('This utility will walk you through creating an API that based on Clean Architecture with Node.JS and Express.JS'));
-console.log(info('Developed by FPO Co.,Ltd'));
-console.log(info('Email: contact@fpo.vn'));
-console.log(info('\n'));
-console.log(info('Press Ctrl + C at any time to quit.\n'));
+//#endregion
 
 async.series([
+    //#region _____GET_PROJECT_AND_DATABASE_INFO_____
     (callback) => {
-        console.log(comment('______________________________________________________'));
-        console.log(comment('____________________Project config____________________'));
-        console.log(comment('______________________________________________________'));
-        rl.question(ask('📒 project name: (demo-clean-api) '), (answer) => {
-            inputData.name = (answer == '') ? inputData.name : answer
-            callback()
-        })
-    },
-    (callback) => {
-        rl.question(ask('1️⃣ version: (1.0.0) '), (answer) => {
-            inputData.version = (answer == '') ? inputData.version : answer
-            callback()
-        })
-    },
-    (callback) => {
-        rl.question(ask('📃 description: '), (answer) => {
-            inputData.description = (answer == '') ? inputData.description : answer
-            callback()
-        })
-    },
-    (callback) => {
-        rl.question(ask('📌 run file: (server.js) '), (answer) => {
-            inputData.main = (answer == '') ? inputData.main : answer
-            callback()
-        })
-    },
-    (callback) => {
-        rl.question(ask('📦 git repository: '), (answer) => {
-            inputData.repo = (answer == '') ? inputData.repo : answer
-            callback()
-        })
-    },
-    (callback) => {
-        rl.question(ask('🏷  keywords: '), (answer) => {
-            inputData.keywords = (answer == '') ? inputData.keywords : utils.String.trimKeywords(answer)
-            callback()
-        })
-    },
-    (callback) => {
-        rl.question(ask('👤 author: '), (answer) => {
-            inputData.author = (answer == '') ? inputData.author : answer
-            callback()
-        })
-    },
-    (callback) => {
-        rl.question(ask('🗝️  license: (ISC) '), (answer) => {
-            inputData.license = (answer == '') ? inputData.license : answer
-            callback()
-        })
-    },
-    (callback) => {
-        console.log(comment('_______________________________________________________'));
-        console.log(comment('____________________Database config____________________'));
-        console.log(comment('_______________________________________________________'));
-        rl.question(ask('🌐 host: (localhost) '), (answer) => {
-            inputData.host = (answer == '') ? inputData.host : answer
-            callback()
-        })
-    },
-    (callback) => {
-        rl.question(ask('🚪 port: (27017) '), (answer) => {
-            inputData.port = (answer == '') ? inputData.port : answer
-            callback()
-        })
-    },
-    (callback) => {
-        rl.question(ask('🗂 dbName: (demo) '), (answer) => {
-            inputData.dbName = (answer == '') ? inputData.dbName : answer
-            callback()
-        })
-    },
-    (callback) => {
-        rl.question(ask('👤 username: '), (answer) => {
-            inputData.username = (answer == '') ? inputData.username : answer
-            callback()
-        })
-    },
-    (callback) => {
-        rl.question(ask('🔐 password: '), (answer) => {
-            inputData.password = (answer == '') ? inputData.password : answer
-            callback()
-        })
-    },
-    (callback) => {
-        rl.question(ask('ℹ️ optional: '), (answer) => {
-            inputData.optional = (answer == '') ? inputData.optional : answer
-            callback()
-        })
-    }
-], () => {
-    rl.close()
+        console.clear();
 
-    console.log(inputData);
+        console.log(figlet.textSync('Clean  API  Generator', {
+            kerning: 'full'
+        }));
+
+        console.log(info('This utility will walk you through creating an API that based on Clean Architecture with Node.JS and Express.JS'));
+        console.log(info('Developed by FPO Co.,Ltd'));
+        console.log(info('Email: contact@fpo.vn'));
+        console.log(info('\n'));
+        console.log(info('Press Ctrl + C at any time to quit.\n'));
+
+        callback();
+    },
+    (callback) => {
+        core.data.read(inputData, (data) => {
+            inputData = data
+            callback()
+        })
+    },
+    //#endregion
+    //#region _____GENERATE_PROJECT_STRUCTURE_____
+    (callback) => {
+        var exitcode = 0;
+        console.log(announce('__________________________________________________________________'));
+        console.log(announce('____________________Generate project structure____________________'));
+        console.log(announce('__________________________________________________________________'));
+
+        root = inputData.output + '/' + inputData.name;
+        if (!fs.existsSync(root)) {
+            console.log(error('❌ Folder [' + root + '] does not exist. Please try again !'));
+            fs.mkdirSync(root);
+            console.log(success('✅ Created [' + root + ' ] folder'));
+
+            // Generate project structure
+            exitcode = core.generateProjectStructure(root)
+        } else {
+            console.log(success('✅ Folder [' + root + '] exist --> Next !!!'));
+
+            // Check empty project folder
+            if (fs.readdirSync(root).length > 0) {
+                console.log(error('❌ Folder [' + root + '] is not empty. Please try again !'));
+                exitcode = 1
+            } else {
+                console.log(success('✅ Folder [' + root + '] is empty --> Next !!!'));
+
+                // Generate project structure
+                exitcode = core.generateProjectStructure(root, inputData)
+            }
+        }
+
+        if (!exitcode) {
+            callback(exitcode)
+        } else {
+            callback()
+        }
+    }
+    //#endregion
+], (exitcode) => {
+    process.exit(exitcode);
 })
-// ============================================================================================
-// ======================================#END MAIN PROGRAM=====================================
-// ============================================================================================
