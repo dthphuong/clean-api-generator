@@ -52,7 +52,6 @@ function generatePackageJSON(root, projectInfo) {
 
         data.hompage = projectInfo.repo + "#readme"
     }
-
     try {
         fs.writeFileSync(root + '/package.json', JSON.stringify(data, null, 4))
         console.log(success('✅ Generate `package.json` file successfully --> Next !!!'));

@@ -85,7 +85,7 @@ async.series([
             console.log(success('✅ Created [' + root + ' ] folder'));
 
             // Generate project structure
-            exitcode = core.generateProjectStructure(root)
+            exitcode = core.generateProjectStructure(root, inputData)
         } else {
             console.log(success('✅ Folder [' + root + '] exist --> Next !!!'));
 
