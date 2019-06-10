@@ -71,6 +71,26 @@ function generateREADME(root) {
     }
 }
 
+function generateGitignore(root) {
+    try {
+        let gitignoreData = fs.readFileSync(__dirname + '/template/.gitignore');
+        fs.writeFileSync(root + '/.gitignore', gitignoreData);
+        console.log(success('✅ Generate `.gitignore` file successfully --> Next !!!'));
+    } catch (err) {
+        throw err;
+    }
+}
+
+function generateServer(root) {
+    try {
+        let serverData = fs.readFileSync(__dirname + '/template/server.js');
+        fs.writeFileSync(root + '/server.js', serverData);
+        console.log(success('✅ Generate `server.js` file successfully --> Next !!!'));
+    } catch (err) {
+        throw err;
+    }
+}
+
 exports.generateProjectStructure = function (root, inputData) {
     try {
         // Generate folder structure
@@ -91,10 +111,10 @@ exports.generateProjectStructure = function (root, inputData) {
         generateREADME(root);
 
         // Generate file`.gitignore`
-
+        generateGitignore(root);
 
         // Generate file`server.js`
-
+        generateServer(root);
 
         // Generate files in `utils` folder
 
