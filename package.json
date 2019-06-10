@@ -1,26 +1,36 @@
 {
-  "name": "log-migration1",
+  "name": "clean-api-generate",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "The useful tool to generate RESTful API with Clean Architecture",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/fpo-project/log-migration.git"
+    "url": "git+https://gitlab.com/fpo-project/clean-api-generate.git"
   },
-  "author": "Anh",
+  "keywords": [
+    "fpo",
+    "api",
+    "genrate",
+    "tool",
+    "nodejs"
+  ],
+  "author": "Phuong Duong",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/fpo-project/log-migration/issues"
+    "url": "https://gitlab.com/fpo-project/clean-api-generate/issues"
   },
-  "homepage": "https://gitlab.com/fpo-project/log-migration#README",
+  "homepage": "https://gitlab.com/fpo-project/clean-api-generate#readme",
   "dependencies": {
     "async": "^2.6.2",
+    "chalk": "^2.4.2",
     "child_process": "^1.0.2",
     "express": "^4.17.1",
+    "figlet": "^1.2.3",
     "fs": "0.0.1-security",
+    "mongodb": "^3.2.6",
     "mongoose": "^5.5.13",
     "mongoose-double": "0.0.1",
     "request": "^2.88.0",
