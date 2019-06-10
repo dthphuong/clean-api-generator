@@ -7,10 +7,10 @@
 - [x] Generate folder structure
 - [x] Generate file `package.json`
 - [x] Generate file `README.md`
-- [ ] Generate file `.gitignore`
-- [ ] Generate file `server.js`
+- [x] Generate file `.gitignore`
+- [x] Generate file `server.js`
 - [ ] Generate files in `utils` folder
-- [ ] Generate file `config.js`
+- [x] Generate file `config.js`
 - [ ] Generate Entities files
 - [ ] Generate Data_provider files
 - [ ] Generate Use_case files

@@ -90,6 +90,22 @@ function generateServer(root) {
     }
 }
 
+function generateConfig(root, databaseInfo) {
+    try {
+        let configData = fs.readFileSync(__dirname + '/template/config.js').toString()
+            .replace(new RegExp('HOST', 'g'), databaseInfo.host)
+            .replace(new RegExp('PORT', 'g'), databaseInfo.port)
+            .replace(new RegExp('DBNAME', 'g'), databaseInfo.dbName)
+            .replace(new RegExp('USERNAME', 'g'), databaseInfo.username)
+            .replace(new RegExp('PASSWORD', 'g'), databaseInfo.password)
+            .replace(new RegExp('OPTIONAL', 'g'), databaseInfo.optional)
+        fs.writeFileSync(root + '/config/index.js', configData);
+        console.log(success('✅ Generate `config.js` file successfully --> Next !!!'));
+    } catch (err) {
+        throw err;
+    }
+}
+
 exports.generateProjectStructure = function (root, inputData) {
     try {
         // Generate folder structure
@@ -119,7 +135,7 @@ exports.generateProjectStructure = function (root, inputData) {
 
 
         // Generate file`config.js`
-
+        generateConfig(root, inputData)
 
         return 0;
     } catch (err) {
