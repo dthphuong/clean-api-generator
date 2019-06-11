@@ -9,7 +9,7 @@
 - [x] Generate file `README.md`
 - [x] Generate file `.gitignore`
 - [x] Generate file `server.js`
-- [ ] Generate files in `utils` folder
+- [x] Generate files in `utils` folder
 - [x] Generate file `config.js`
 - [ ] Generate Entities files
 - [ ] Generate Data_provider files

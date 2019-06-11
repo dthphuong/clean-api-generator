@@ -90,6 +90,32 @@ function generateServer(root) {
     }
 }
 
+function generateUtilsFile(root) {
+    try {
+        let datetimeData = fs.readFileSync(__dirname + '/template/utils/DateTime.js');
+        fs.writeFileSync(root + '/utils/DateTime.js', datetimeData);
+
+        let errorHandleData = fs.readFileSync(__dirname + '/template/utils/ErrorHandle.js');
+        fs.writeFileSync(root + '/utils/ErrorHandle.js', errorHandleData);
+
+        let indexData = fs.readFileSync(__dirname + '/template/utils/index.js');
+        fs.writeFileSync(root + '/utils/index.js', indexData);
+
+        let iOData = fs.readFileSync(__dirname + '/template/utils/IO.js');
+        fs.writeFileSync(root + '/utils/IO.js', iOData);
+
+        let limiterData = fs.readFileSync(__dirname + '/template/utils/Limiter.js');
+        fs.writeFileSync(root + '/utils/Limiter.js', limiterData);
+
+        let mongoData = fs.readFileSync(__dirname + '/template/utils/MongoConnect.js');
+        fs.writeFileSync(root + '/utils/MongoConnect.js', mongoData);
+        console.log(success('✅ Generate files in util successfully --> Next !!!'));
+    } catch (err) {
+        throw err;
+    }
+}
+
+
 function generateConfig(root, databaseInfo) {
     try {
         let configData = fs.readFileSync(__dirname + '/template/config.js').toString()
@@ -132,7 +158,7 @@ exports.generateProjectStructure = function (root, inputData) {
         generateServer(root);
 
         // Generate files in `utils` folder
-
+        generateUtilsFile(root)
 
         // Generate file`config.js`
         generateConfig(root, inputData)
