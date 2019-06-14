@@ -7,9 +7,9 @@ global.config = require("./config");
 global._ = require("underscore");
 var express = require("express"),
   bodyParser = require("body-parser"),
-  util = require('./util'),
-  jwt = require("./util/JWT"),
-  limiter = require('./util/Limiter'),
+  util = require('./utils'),
+  jwt = require("./utils/JWT"),
+  limiter = require('./utils/Limiter'),
   fs = require('fs');
 var app = express();
 
