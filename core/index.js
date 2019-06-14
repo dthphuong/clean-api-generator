@@ -52,7 +52,6 @@ function generatePackageJSON(root, projectInfo) {
 
         data.hompage = projectInfo.repo + "#readme"
     }
-
     try {
         fs.writeFileSync(root + '/package.json', JSON.stringify(data, null, 4))
         console.log(success('✅ Generate `package.json` file successfully --> Next !!!'));
@@ -66,6 +65,68 @@ function generateREADME(root) {
         let readmeData = fs.readFileSync(__dirname + '/template/README.md');
         fs.writeFileSync(root + '/README.md', readmeData);
         console.log(success('✅ Generate `README.md` file successfully --> Next !!!'));
+    } catch (err) {
+        throw err;
+    }
+}
+
+function generateGitignore(root) {
+    try {
+        let gitignoreData = fs.readFileSync(__dirname + '/template/.gitignore');
+        fs.writeFileSync(root + '/.gitignore', gitignoreData);
+        console.log(success('✅ Generate `.gitignore` file successfully --> Next !!!'));
+    } catch (err) {
+        throw err;
+    }
+}
+
+function generateServer(root) {
+    try {
+        let serverData = fs.readFileSync(__dirname + '/template/server.js');
+        fs.writeFileSync(root + '/server.js', serverData);
+        console.log(success('✅ Generate `server.js` file successfully --> Next !!!'));
+    } catch (err) {
+        throw err;
+    }
+}
+
+function generateUtilsFile(root) {
+    try {
+        let datetimeData = fs.readFileSync(__dirname + '/template/utils/DateTime.js');
+        fs.writeFileSync(root + '/utils/DateTime.js', datetimeData);
+
+        let errorHandleData = fs.readFileSync(__dirname + '/template/utils/ErrorHandle.js');
+        fs.writeFileSync(root + '/utils/ErrorHandle.js', errorHandleData);
+
+        let indexData = fs.readFileSync(__dirname + '/template/utils/index.js');
+        fs.writeFileSync(root + '/utils/index.js', indexData);
+
+        let iOData = fs.readFileSync(__dirname + '/template/utils/IO.js');
+        fs.writeFileSync(root + '/utils/IO.js', iOData);
+
+        let limiterData = fs.readFileSync(__dirname + '/template/utils/Limiter.js');
+        fs.writeFileSync(root + '/utils/Limiter.js', limiterData);
+
+        let mongoData = fs.readFileSync(__dirname + '/template/utils/MongoConnect.js');
+        fs.writeFileSync(root + '/utils/MongoConnect.js', mongoData);
+        console.log(success('✅ Generate files in util successfully --> Next !!!'));
+    } catch (err) {
+        throw err;
+    }
+}
+
+
+function generateConfig(root, databaseInfo) {
+    try {
+        let configData = fs.readFileSync(__dirname + '/template/config.js').toString()
+            .replace(new RegExp('HOST', 'g'), databaseInfo.host)
+            .replace(new RegExp('PORT', 'g'), databaseInfo.port)
+            .replace(new RegExp('DBNAME', 'g'), databaseInfo.dbName)
+            .replace(new RegExp('USERNAME', 'g'), databaseInfo.username)
+            .replace(new RegExp('PASSWORD', 'g'), databaseInfo.password)
+            .replace(new RegExp('OPTIONAL', 'g'), databaseInfo.optional)
+        fs.writeFileSync(root + '/config/index.js', configData);
+        console.log(success('✅ Generate `config.js` file successfully --> Next !!!'));
     } catch (err) {
         throw err;
     }
@@ -91,16 +152,16 @@ exports.generateProjectStructure = function (root, inputData) {
         generateREADME(root);
 
         // Generate file`.gitignore`
-
+        generateGitignore(root);
 
         // Generate file`server.js`
-
+        generateServer(root);
 
         // Generate files in `utils` folder
-
+        generateUtilsFile(root)
 
         // Generate file`config.js`
-
+        generateConfig(root, inputData)
 
         return 0;
     } catch (err) {
