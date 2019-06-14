@@ -80,7 +80,7 @@ async.series([
 
         root = inputData.output + '/' + inputData.name;
         if (!fs.existsSync(root)) {
-            console.log(error('⚠️ Folder [' + root + '] does not exist.'));
+            console.log(error('⚠️  Folder [' + root + '] does not exist.'));
             fs.mkdirSync(root);
             console.log(success('✅ Created [' + root + ' ] folder'));
 
@@ -106,6 +106,24 @@ async.series([
         } else {
             callback()
         }
+    },
+    //#endregion
+    //#region _____GENERATE_CORE_FILES_BASED_ON_DATABASE_____
+    (callback) => {
+        console.log(announce('__________________________________________________________________'));
+        console.log(announce('_______________Generate core files based on Database______________'));
+        console.log(announce('__________________________________________________________________'));
+
+        root = inputData.output + '/' + inputData.name;
+
+        core.generateKernelFiles(inputData, function (err, data) {
+            if (err) {
+                callback(1);
+            } else {
+
+                callback();
+            }
+        });
     }
     //#endregion
 ], (exitcode) => {

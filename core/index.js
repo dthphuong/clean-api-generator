@@ -2,126 +2,10 @@
  * Created by Phuong Duong on 08/06/2019
  */
 const { exec } = require('child_process');
+const kernel = require('./kernel');
+const async = require('async');
 
-exports.data = require('./data')
-
-function generatePackageJSON(root, projectInfo) {
-    var data = {
-        "name": projectInfo.name,
-        "version": projectInfo.version,
-        "description": projectInfo.description,
-        "main": projectInfo.main,
-        "scripts": {
-            "test": "echo \"Error: no test specified\" && exit 1"
-        },
-        "keywords": projectInfo.keywords,
-        "author": projectInfo.author,
-        "license": projectInfo.license,
-        "dependencies": {
-            // "async": "^2.6.0",
-            // "body-parser": "^1.18.2",
-            // "crypto-js": "^3.1.9-1",
-            // "express": "^4.16.2",
-            // "express-mailer": "^0.3.1",
-            // "express-rate-limit": "^3.4.0",
-            // "fcm-node": "^1.3.0",
-            // "fluent-ffmpeg": "^2.1.2",
-            // "formidable": "^1.1.1",
-            // "fs-extra": "^8.0.1",
-            // "jsonwebtoken": "^8.1.1",
-            // "mongoose": "^5.0.3",
-            // "mongoose-double": "0.0.1",
-            // "nodemailer": "^4.6.8",
-            // "randomstring": "^1.1.5",
-            // "request": "^2.83.0",
-            // "sharp": "^0.21.0",
-            // "slice": "^1.0.0",
-            // "socket.io": "^2.2.0",
-            // "underscore": "^1.9.1"
-        }
-    }
-
-    if (projectInfo.repo != '') {
-        data.repository = {
-            "type": "git",
-            "url": "git+" + projectInfo.repo + ".git"
-        }
-
-        data.bugs = {
-            "url": projectInfo.repo + "/issues"
-        }
-
-        data.hompage = projectInfo.repo + "#readme"
-    }
-    try {
-        fs.writeFileSync(root + '/package.json', JSON.stringify(data, null, 4))
-        console.log(success('✅ Generate `package.json` file successfully --> Next !!!'));
-    } catch (err) {
-        throw err;
-    }
-}
-
-function generateREADME(root) {
-    try {
-        let readmeData = fs.readFileSync(__dirname + '/template/README.md');
-        fs.writeFileSync(root + '/README.md', readmeData);
-        console.log(success('✅ Generate `README.md` file successfully --> Next !!!'));
-    } catch (err) {
-        throw err;
-    }
-}
-
-function generateGitignore(root) {
-    try {
-        let gitignoreData = fs.readFileSync(__dirname + '/template/.gitignore');
-        fs.writeFileSync(root + '/.gitignore', gitignoreData);
-        console.log(success('✅ Generate `.gitignore` file successfully --> Next !!!'));
-    } catch (err) {
-        throw err;
-    }
-}
-
-function generateServer(root) {
-    try {
-        let serverData = fs.readFileSync(__dirname + '/template/server.js');
-        fs.writeFileSync(root + '/server.js', serverData);
-        console.log(success('✅ Generate `server.js` file successfully --> Next !!!'));
-    } catch (err) {
-        throw err;
-    }
-}
-
-function generateUtilsDir(root) {
-    try {
-        let copyCommand = 'cp -r ' + __dirname + '/template/utils ' + root
-        exec(copyCommand, (err, stdout, stderr) => {
-            if (err) {
-                throw err;
-            }
-        })
-
-        console.log(success('✅ Generate utils directory successfully --> Next !!!'));
-    } catch (err) {
-        throw err;
-    }
-}
-
-
-function generateConfig(root, databaseInfo) {
-    try {
-        let configData = fs.readFileSync(__dirname + '/template/config.js').toString()
-            .replace(new RegExp('HOST', 'g'), databaseInfo.host)
-            .replace(new RegExp('PORT', 'g'), databaseInfo.port)
-            .replace(new RegExp('DBNAME', 'g'), databaseInfo.dbName)
-            .replace(new RegExp('USERNAME', 'g'), databaseInfo.username)
-            .replace(new RegExp('PASSWORD', 'g'), databaseInfo.password)
-            .replace(new RegExp('OPTIONAL', 'g'), databaseInfo.optional)
-        fs.writeFileSync(root + '/config/index.js', configData);
-        console.log(success('✅ Generate `config.js` file successfully --> Next !!!'));
-    } catch (err) {
-        throw err;
-    }
-}
+exports.data = require('./data');
 
 exports.generateProjectStructure = function (root, inputData) {
     try {
@@ -137,26 +21,53 @@ exports.generateProjectStructure = function (root, inputData) {
         console.log(success('✅ Generate folder structure successfully --> Next !!!'));
 
         // Generate file`package.json`
-        generatePackageJSON(root, inputData);
+        kernel.generatePackageJSON(root, inputData);
 
         // Generate file`README.md`
-        generateREADME(root);
+        kernel.generateREADME(root);
 
         // Generate file`.gitignore`
-        generateGitignore(root);
+        kernel.generateGitignore(root);
 
         // Generate file`server.js`
-        generateServer(root);
+        kernel.generateServer(root);
 
         // Generate files in `utils` folder
-        generateUtilsDir(root)
+        kernel.generateUtilsDir(root);
 
         // Generate file`config.js`
-        generateConfig(root, inputData)
+        kernel.generateConfig(root, inputData);
+
+        console.log(success('✅ Generate utils directory successfully --> Next !!!'));
 
         return 0;
     } catch (err) {
         console.log(error('❌ ' + err));
         return 1;
+    }
+}
+
+exports.generateKernelFiles = function (inputData, cb) {
+    try {
+        kernel.getCollections(inputData, (err, collections) => {
+            if (err) {
+                cb(err, null)
+            } else {
+                console.log(collections);
+                async.every(collections, (col, callback) => {
+                    kernel.generateEntities(inputData, col, (err) => {
+                        if (err) {
+                            callback(err, false)
+                        } else {
+                            callback(null, true)
+                        }
+                    })
+                }, cb)
+            }
+        })
+
+        // console.log(success('✅ Generate Kernel files successfully --> Next !!!'));
+    } catch (err) {
+        console.log(error('❌ ' + err));
     }
 }

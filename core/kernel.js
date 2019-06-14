@@ -1,0 +1,207 @@
+/**
+ * Created by Phuong Duong on 14/06/2019
+ */
+const { exec } = require('child_process');
+const async = require('async');
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+const MongooseType = require('../utils/Type')
+
+exports.generatePackageJSON = (root, projectInfo) => {
+    var data = {
+        "name": projectInfo.name,
+        "version": projectInfo.version,
+        "description": projectInfo.description,
+        "main": projectInfo.main,
+        "config": {
+            "unsafe-perm": true
+        },
+        "scripts": {
+            "test": "echo \"Error: no test specified\" && exit 1"
+        },
+        "keywords": projectInfo.keywords,
+        "author": projectInfo.author,
+        "license": projectInfo.license,
+        "dependencies": {
+            "async": "^3.0.1",
+            "body-parser": "^1.19.0",
+            "crypto-js": "^3.1.9-1",
+            "express": "^4.17.1",
+            "express-mailer": "^0.3.1",
+            "express-rate-limit": "^3.4.0",
+            "fcm-node": "^1.3.0",
+            "fluent-ffmpeg": "^2.1.2",
+            "formidable": "^1.1.1",
+            "fs-extra": "^8.0.1",
+            "jsonwebtoken": "^8.1.1",
+            "mongoose": "^5.0.3",
+            "mongoose-double": "0.0.1",
+            "nodemailer": "^4.6.8",
+            "randomstring": "^1.1.5",
+            "request": "^2.83.0",
+            "sharp": "^0.22.1",
+            "slice": "^1.0.0",
+            "socket.io": "^2.2.0",
+            "underscore": "^1.9.1"
+        }
+    }
+
+    if (projectInfo.repo != '') {
+        data.repository = {
+            "type": "git",
+            "url": "git+" + projectInfo.repo + ".git"
+        }
+
+        data.bugs = {
+            "url": projectInfo.repo + "/issues"
+        }
+
+        data.hompage = projectInfo.repo + "#readme"
+    }
+    try {
+        fs.writeFileSync(root + '/package.json', JSON.stringify(data, null, 4))
+        console.log(success('✅ Generate `package.json` file successfully --> Next !!!'));
+    } catch (err) {
+        throw err;
+    }
+}
+
+exports.generateREADME = (root) => {
+    try {
+        let readmeData = fs.readFileSync(__dirname + '/template/README.md');
+        fs.writeFileSync(root + '/README.md', readmeData);
+        console.log(success('✅ Generate `README.md` file successfully --> Next !!!'));
+    } catch (err) {
+        throw err;
+    }
+}
+
+exports.generateGitignore = (root) => {
+    try {
+        let gitignoreData = fs.readFileSync(__dirname + '/template/.gitignore');
+        fs.writeFileSync(root + '/.gitignore', gitignoreData);
+        console.log(success('✅ Generate `.gitignore` file successfully --> Next !!!'));
+    } catch (err) {
+        throw err;
+    }
+}
+
+exports.generateServer = (root) => {
+    try {
+        let serverData = fs.readFileSync(__dirname + '/template/server.js');
+        fs.writeFileSync(root + '/server.js', serverData);
+        console.log(success('✅ Generate `server.js` file successfully --> Next !!!'));
+    } catch (err) {
+        throw err;
+    }
+}
+
+exports.generateUtilsDir = (root) => {
+    try {
+        let copyCommand = 'cp -r ' + __dirname + '/template/utils ' + root
+        exec(copyCommand, (err, stdout, stderr) => {
+            if (err) {
+                throw err;
+            }
+        })
+
+        console.log(success('✅ Generate utils directory successfully --> Next !!!'));
+    } catch (err) {
+        throw err;
+    }
+}
+
+exports.generateConfig = (root, databaseInfo) => {
+    try {
+        let configData = fs.readFileSync(__dirname + '/template/config.js').toString()
+            .replace(new RegExp('HOST', 'g'), databaseInfo.host)
+            .replace(new RegExp('PORT', 'g'), databaseInfo.port)
+            .replace(new RegExp('DBNAME', 'g'), databaseInfo.dbName)
+            .replace(new RegExp('USERNAME', 'g'), databaseInfo.username)
+            .replace(new RegExp('PASSWORD', 'g'), databaseInfo.password)
+            .replace(new RegExp('OPTIONAL', 'g'), databaseInfo.optional)
+        fs.writeFileSync(root + '/config/index.js', configData);
+        console.log(success('✅ Generate `config.js` file successfully --> Next !!!'));
+    } catch (err) {
+        throw err;
+    }
+}
+
+exports.getCollections = (dbInfo, callback) => {
+    var connectionString = '';
+
+    if (dbInfo.username == '' || dbInfo.password == '') {
+        connectionString = 'mongodb://' + dbInfo.host + "/" + dbInfo.dbName + dbInfo.optional;
+    } else {
+        connectionString = 'mongodb://' + dbInfo.username + ':' + dbInfo.password + '@' +
+            dbInfo.host + "/" + dbInfo.dbName + dbInfo.optional;
+    }
+
+    // Use connect method to connect to the server
+    MongoClient.connect(connectionString, function (err, client) {
+        if (err) {
+            callback(err, null)
+        } else {
+            console.log(success('✅ Connected successfully to database'));
+
+            const db = client.db(dbInfo.dbName);
+            db.collections((err, colList) => {
+                if (err) {
+                    callback(err, null)
+                } else {
+                    callback(null, _.pluck(colList, 'collectionName'))
+                }
+            })
+
+            client.close();
+        }
+    });
+}
+
+exports.generateEntities = (dbInfo, collectionName, callback) => {
+    var connectionString = '';
+
+    if (dbInfo.username == '' || dbInfo.password == '') {
+        connectionString = 'mongodb://' + dbInfo.host + "/" + dbInfo.dbName + dbInfo.optional;
+    } else {
+        connectionString = 'mongodb://' + dbInfo.username + ':' + dbInfo.password + '@' +
+            dbInfo.host + "/" + dbInfo.dbName + dbInfo.optional;
+    }
+
+    // Use connect method to connect to the server
+    MongoClient.connect(connectionString, function (err, client) {
+        if (err) {
+            console.log(error('❌ Failed to connect'));
+            callback(err)
+        } else {
+            console.log(success('✅ Connected successfully to database'));
+
+            const db = client.db(dbInfo.dbName);
+            db.collection(collectionName).aggregate([
+                { $limit: 1 }
+            ], (err, data) => {
+                if (err) {
+                    callback(err)
+                } else {
+                    data.toArray((err, docs) => {
+                        docs = docs[0]
+
+                        let keys = _.allKeys(docs),
+                            values = _.values(docs);
+
+                        // console.log(keys);
+                        // console.log(values);
+
+                        typeList = _.map(keys, (k) => {
+                            console.log(k + ' ( ' + docs[k] + ' ) ' + ': ' + utils.Type.get(docs[k]));
+                        })
+
+                        callback(null)
+                    });
+                }
+            })
+
+            client.close();
+        }
+    });
+}
