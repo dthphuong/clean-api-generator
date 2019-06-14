@@ -80,7 +80,7 @@ async.series([
 
         root = inputData.output + '/' + inputData.name;
         if (!fs.existsSync(root)) {
-            console.log(error('❌ Folder [' + root + '] does not exist. Please try again !'));
+            console.log(error('⚠️ Folder [' + root + '] does not exist.'));
             fs.mkdirSync(root);
             console.log(success('✅ Created [' + root + ' ] folder'));
 
