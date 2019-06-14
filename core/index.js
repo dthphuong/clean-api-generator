@@ -1,6 +1,7 @@
 /**
  * Created by Phuong Duong on 08/06/2019
  */
+const { exec } = require('child_process');
 
 exports.data = require('./data')
 
@@ -17,26 +18,26 @@ function generatePackageJSON(root, projectInfo) {
         "author": projectInfo.author,
         "license": projectInfo.license,
         "dependencies": {
-            "async": "^2.6.0",
-            "body-parser": "^1.18.2",
-            "crypto-js": "^3.1.9-1",
-            "express": "^4.16.2",
-            "express-mailer": "^0.3.1",
-            "express-rate-limit": "^3.4.0",
-            "fcm-node": "^1.3.0",
-            "fluent-ffmpeg": "^2.1.2",
-            "formidable": "^1.1.1",
-            "fs-extra": "^8.0.1",
-            "jsonwebtoken": "^8.1.1",
-            "mongoose": "^5.0.3",
-            "mongoose-double": "0.0.1",
-            "nodemailer": "^4.6.8",
-            "randomstring": "^1.1.5",
-            "request": "^2.83.0",
-            "sharp": "^0.21.0",
-            "slice": "^1.0.0",
-            "socket.io": "^2.2.0",
-            "underscore": "^1.9.1"
+            // "async": "^2.6.0",
+            // "body-parser": "^1.18.2",
+            // "crypto-js": "^3.1.9-1",
+            // "express": "^4.16.2",
+            // "express-mailer": "^0.3.1",
+            // "express-rate-limit": "^3.4.0",
+            // "fcm-node": "^1.3.0",
+            // "fluent-ffmpeg": "^2.1.2",
+            // "formidable": "^1.1.1",
+            // "fs-extra": "^8.0.1",
+            // "jsonwebtoken": "^8.1.1",
+            // "mongoose": "^5.0.3",
+            // "mongoose-double": "0.0.1",
+            // "nodemailer": "^4.6.8",
+            // "randomstring": "^1.1.5",
+            // "request": "^2.83.0",
+            // "sharp": "^0.21.0",
+            // "slice": "^1.0.0",
+            // "socket.io": "^2.2.0",
+            // "underscore": "^1.9.1"
         }
     }
 
@@ -90,26 +91,16 @@ function generateServer(root) {
     }
 }
 
-function generateUtilsFile(root) {
+function generateUtilsDir(root) {
     try {
-        let datetimeData = fs.readFileSync(__dirname + '/template/utils/DateTime.js');
-        fs.writeFileSync(root + '/utils/DateTime.js', datetimeData);
+        let copyCommand = 'cp -r ' + __dirname + '/template/utils ' + root
+        exec(copyCommand, (err, stdout, stderr) => {
+            if (err) {
+                throw err;
+            }
+        })
 
-        let errorHandleData = fs.readFileSync(__dirname + '/template/utils/ErrorHandle.js');
-        fs.writeFileSync(root + '/utils/ErrorHandle.js', errorHandleData);
-
-        let indexData = fs.readFileSync(__dirname + '/template/utils/index.js');
-        fs.writeFileSync(root + '/utils/index.js', indexData);
-
-        let iOData = fs.readFileSync(__dirname + '/template/utils/IO.js');
-        fs.writeFileSync(root + '/utils/IO.js', iOData);
-
-        let limiterData = fs.readFileSync(__dirname + '/template/utils/Limiter.js');
-        fs.writeFileSync(root + '/utils/Limiter.js', limiterData);
-
-        let mongoData = fs.readFileSync(__dirname + '/template/utils/MongoConnect.js');
-        fs.writeFileSync(root + '/utils/MongoConnect.js', mongoData);
-        console.log(success('✅ Generate files in util successfully --> Next !!!'));
+        console.log(success('✅ Generate utils directory successfully --> Next !!!'));
     } catch (err) {
         throw err;
     }
@@ -158,7 +149,7 @@ exports.generateProjectStructure = function (root, inputData) {
         generateServer(root);
 
         // Generate files in `utils` folder
-        generateUtilsFile(root)
+        generateUtilsDir(root)
 
         // Generate file`config.js`
         generateConfig(root, inputData)
