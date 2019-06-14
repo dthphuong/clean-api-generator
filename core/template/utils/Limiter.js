@@ -1,3 +1,8 @@
+/**
+ * Created by Phuong Duong on 24/09/2018
+ */
+'use strict'
+
 const rateLimit = require("express-rate-limit");
 
 const resMessage = {

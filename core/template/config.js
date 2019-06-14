@@ -40,7 +40,7 @@ switch (configType) {
         break;
     case 1: // Production environment
         exports.server = {
-            port: 8087,
+            port: 8080,
             secret: '###FPO-secret###',
             exptime: '604800',
             base_url: 'http://fpo.vn/',
@@ -61,13 +61,13 @@ switch (configType) {
             password: 'PASSWORD',
             optional: 'OPTIONAL'
         }
-        exports.ffmpegPath = "C:\\ffmpeg\\bin\\ffmpeg.exe";
-        exports.ffprobePath = "C:\\ffmpeg\\bin\\ffprobe.exe";
-        exports.tempPhotoPath = "C:\\FPO\\___temp-photo\\";
+        exports.ffmpegPath = home + "/usr/bin/ffmpeg";
+        exports.ffprobePath = home + "/usr/bin/ffprobe";
+        exports.tempPhotoPath = home + "/upload/";
         exports.apiPath = "/home/youth-app-api/";
-        exports.webPath = "C:\\FPO\\qrscan\\";
-        exports.assetWebPath = "C:\\FPO\\qrscan\\";
-        exports.thumbWebPath = "C:\\FPO\\qrscan\\thumb\\";
-        exports.defaultAvatar = "/images/contacts/user_empty.png";
+        exports.webPath = "/var/www/html/asset/";
+        exports.assetWebPath = "/var/www/html/asset/";
+        exports.thumbWebPath = "/var/www/html/thumbs/";
+        exports.defaultAvatar = "layout/images/user.png";
         break;
 }
