@@ -127,7 +127,7 @@ exports.generateConfig = (root, databaseInfo) => {
     }
 }
 
-exports.getCollections = (dbInfo, callback) => {
+exports.connectToMongoDB = (dbInfo, callback) => {
     var connectionString = '';
 
     if (dbInfo.username == '' || dbInfo.password == '') {
@@ -138,20 +138,16 @@ exports.getCollections = (dbInfo, callback) => {
     }
 
     // Use connect method to connect to the server
-    MongoClient.connect(connectionString, function (err, client) {
+    console.log(info('Connecting to database . . . '));
+    MongoClient.connect(connectionString, { useNewUrlParser: true }, function (err, client) {
         if (err) {
-            callback(err, null)
+            console.log(error('❌ Failed to connect'));
+            callback(err, null);
         } else {
             console.log(success('✅ Connected successfully to database'));
 
             const db = client.db(dbInfo.dbName);
-            db.collections((err, colList) => {
-                if (err) {
-                    callback(err, null)
-                } else {
-                    callback(null, _.pluck(colList, 'collectionName'))
-                }
-            })
+            callback(null, db);
         }
     });
 }
@@ -166,7 +162,8 @@ exports.generateEntities = (dbInfo, collectionName, callback) => {
             dbInfo.host + ':' + dbInfo.port + "/" + dbInfo.dbName + dbInfo.optional;
     }
     // Use connect method to connect to the server
-    MongoClient.connect(connectionString, function (err, client) {
+    console.log(info('Connecting to database . . . '));
+    MongoClient.connect(connectionString, { useNewUrlParser: true }, function (err, client) {
         if (err) {
             console.log(error('❌ Failed to connect'));
             callback(err)
