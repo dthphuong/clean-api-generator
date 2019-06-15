@@ -171,7 +171,7 @@ exports.generateEntity = (db, collectionName, callback) => {
 
                 let fieldsList = {}
                 _.each(keys, (k) => {
-                    fieldsList[k] = utils.Type.get(doc[k])
+                    fieldsList[k] = utils.Type.get(values[k])
                 })
 
                 // Generate to file(s) here
