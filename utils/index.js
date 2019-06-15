@@ -3,3 +3,4 @@
  */
 exports.String = require('./String');
 exports.Type = require('./Type');
+exports.ErrorHandle = require('./ErrorHandle');
