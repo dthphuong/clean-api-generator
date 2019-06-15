@@ -37,6 +37,7 @@ exports.generatePackageJSON = (root, projectInfo) => {
             "fluent-ffmpeg": "^2.1.2",
             "formidable": "^1.1.1",
             "fs-extra": "^8.0.1",
+            "html5-to-pdf": "^3.1.3",
             "jsonwebtoken": "^8.1.1",
             "mongoose": "^5.0.3",
             "mongoose-double": "0.0.1",
@@ -205,6 +206,63 @@ exports.generateUseCase = (collectionName, callback) => {
 
         fs.writeFileSync(this.root + '/core/use_case/' + collectionName + '.js', usecaseTemplate, 'utf8');
         callback(null);
+    } catch (err) {
+        callback(err)
+    }
+}
+
+exports.generateDataProvider = (db, collectionName, callback) => {
+    try {
+        db.collection(collectionName).aggregate([
+            { $limit: 1 }
+        ], (err, data) => {
+            if (err) {
+                callback(err);
+            } else {
+                data.toArray((err, docs) => {
+                    let doc = docs[0];
+
+                    let keys = _.allKeys(doc),
+                        values = _.values(doc);
+
+                    let fieldsList = {}
+                    _.each(keys, (k) => {
+                        fieldsList[k] = utils.Type.get(values[k])
+                    })
+
+                    // Start generate
+                    let dvTemplate = fs.readFileSync(templatePath + 'data_provider.js', 'utf8');
+                    let insertItem = {}, updateItem = {};
+                    let checkingItem = '';
+                    let checkingTemplate = "___COLLECTION_NAME___.___FIELD_NAME___ = ((___COLLECTION_NAME___.___FIELD_NAME___ == '' || ___COLLECTION_NAME___.___FIELD_NAME___ == undefined) ? data[0].___FIELD_NAME___ : ___COLLECTION_NAME___.___FIELD_NAME___);\n"
+
+
+                    _.each(keys, (k) => {
+                        if (k != '_id') {
+                            insertItem[k] = '===data.' + k + '===,'
+
+                            updateItem[k] = '===' + collectionName + '.' + k + '===,'
+                            checkingItem += checkingTemplate
+                                .replace(/___COLLECTION_NAME___/g, collectionName)
+                                .replace(/___FIELD_NAME___/g, k)
+                        }
+                    })
+
+                    dvTemplate = dvTemplate
+                        .replace(/___COLLECTION_NAME___/g, collectionName)
+                        .replace(/___ENTITY_NAME___/g, utils.String.toProperCase(collectionName) + 'Entity')
+                        .replace(/___ID___/g, collectionName + 'Id')
+                        .replace(/___INSERT_ITEM___/g, JSON.stringify(insertItem, null, 4))
+                        .replace(/___UPDATE_ITEM___/g, JSON.stringify(updateItem, null, 4))
+                        .replace(/===,\"/g, '')
+                        .replace(/\"===/g, '')
+                        .replace(/___CHECKING_STEP___/g, checkingItem)
+
+                    fs.writeFileSync(this.root + '/data_provider/' + collectionName + '.js', dvTemplate, 'utf8');
+                    callback(null);
+                });
+            }
+        })
     } catch (err) {
         callback(err)
     }

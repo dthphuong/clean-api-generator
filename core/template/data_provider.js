@@ -11,11 +11,11 @@ exports.getAll = function (cb) {
         .then(db => {
             async.waterfall([
                 function (callback) {
-                    Entity.DBENTITY.find({}, function (err, result) {
+                    Entity.___ENTITY_NAME___.aggregate([], function (err, result) {
                         if (err) {
                             callback(err, null)
                         } else {
-                            if (result.length > 0) {
+                            if (_.isEmpty(result)) {
                                 callback(null, result)
                             } else {
                                 callback(2, null)
@@ -26,25 +26,25 @@ exports.getAll = function (cb) {
             ], cb)
         })
         .catch(err => {
-            console.log('DBNAME_dataprovider_getAll: ' + err);
+            console.log('___COLLECTION_NAME____dataprovider_getAll: ' + err);
             cb(err, null)
         })
 }
 
-exports.getById = function (NAMEID, cb) {
+exports.getById = function (___ID___, cb) {
     MongoConnect.Connect(config.database.name)
         .then(db => {
             async.waterfall([
                 function (callback) {
-                    Entity.DBENTITY.aggregate([{
+                    Entity.___ENTITY_NAME___.aggregate([{
                         $match: {
-                            '_id': mongoose.Types.ObjectId(NAMEID)
+                            _id: mongoose.Types.ObjectId(___ID___)
                         }
                     }], function (err, result) {
                         if (err) {
                             callback(err, null)
                         } else {
-                            if (result.length > 0) {
+                            if (_.isEmpty(result)) {
                                 callback(null, result[0])
                             } else {
                                 callback(3, null)
@@ -55,7 +55,7 @@ exports.getById = function (NAMEID, cb) {
             ], cb)
         })
         .catch(err => {
-            console.log('DBNAME_dataprovider_getAll: ' + err);
+            console.log('___COLLECTION_NAME____dataprovider_getAll: ' + err);
             cb(err, null)
         })
 }
@@ -63,45 +63,30 @@ exports.getById = function (NAMEID, cb) {
 exports.create = function (data, cb) {
     MongoConnect.Connect(config.database.name)
         .then(db => {
-            Entity.DBENTITY.create({
-                DATA
-            }, cb)
+            Entity.___ENTITY_NAME___.create(___INSERT_ITEM___, cb)
         })
         .catch(err => {
-            console.log('DBNAME_dataprovider_create: ' + err);
+            console.log('___COLLECTION_NAME____dataprovider_create: ' + err);
             cb(err, null)
         })
 }
 
-exports.delete = function (NAMEID, cb) {
-    MongoConnect.Connect(config.database.name)
-        .then(db => {
-            Entity.DBENTITY.deleteOne({
-                _id: mongoose.Types.ObjectId(NAMEID)
-            }, cb)
-        })
-        .catch(err => {
-            console.log('DBNAME_dataprovider_delete: ' + err);
-            cb(err, null)
-        })
-}
-
-exports.update = function (data, cb) {
+exports.update = function (___COLLECTION_NAME___, cb) {
     MongoConnect.Connect(config.database.name)
         .then(db => {
             async.waterfall([
                 function (callback) {
-                    let NAMEID = data.NAMEID;
-                    Entity.DBENTITY.aggregate([{
+                    let ___ID___ = ___COLLECTION_NAME___.___ID___;
+                    Entity.___ENTITY_NAME___.aggregate([{
                         $match: {
-                            _id: mongoose.Types.ObjectId(NAMEID)
+                            _id: mongoose.Types.ObjectId(___ID___)
                         }
                     }], function (err, result) {
                         if (err) {
                             callback(err, null)
                         } else {
                             if (result.length > 0) {
-                                UPDATE
+                                ___CHECKING_STEP___
                                 callback(null, data)
                             } else {
                                 callback(3, null)
@@ -109,26 +94,37 @@ exports.update = function (data, cb) {
                         }
                     })
                 },
-                function (data, callback) {
-                    Entity.DBENTITY.updateOne({
-                        _id: data.NAMEID
+                function (___COLLECTION_NAME___, callback) {
+                    Entity.___ENTITY_NAME___.updateOne({
+                        _id: ___COLLECTION_NAME___.___ID___
                     }, {
-                        $set: {
-                            DATA
-                        }
-                    }, function (err, data) {
-                        if (!err) {
-                            callback(null, data)
-                        } else {
-                            callback(err, null)
-                        }
-                    })
+                            $set: ___UPDATE_ITEM___
+                        }, function (err, result) {
+                            if (!err) {
+                                callback(null, result)
+                            } else {
+                                callback(err, null)
+                            }
+                        })
                 }
 
             ], cb)
         })
         .catch(err => {
-            console.log('DBNAME_dataprovider_update: ' + err);
+            console.log('___COLLECTION_NAME____dataprovider_update: ' + err);
+            cb(err, null)
+        })
+}
+
+exports.delete = function (___ID___, cb) {
+    MongoConnect.Connect(config.database.name)
+        .then(db => {
+            Entity.___ENTITY_NAME___.deleteOne({
+                _id: mongoose.Types.ObjectId(___ID___)
+            }, cb)
+        })
+        .catch(err => {
+            console.log('___COLLECTION_NAME____dataprovider_delete: ' + err);
             cb(err, null)
         })
 }
