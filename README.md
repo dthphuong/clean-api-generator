@@ -12,7 +12,7 @@
 - [x] Generate files in `utils` folder
 - [x] Generate file `config.js`
 - [x] Generate Entities files
-- [ ] Generate Data_provider files
-- [ ] Generate Use_case files
+- [x] Generate Data_provider files
+- [x] Generate Use_case files
 - [ ] Generate Routes files
 
