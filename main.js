@@ -118,6 +118,7 @@ async.series([
 
         core.generateKernelFiles(inputData, function (err, data) {
             if (err) {
+                console.log(error('❌  ' + utils.ErrorHandle.getErrorMessage(err)));
                 callback(1);
             } else {
 
