@@ -65,7 +65,7 @@ exports.generateKernelFiles = function (inputData, cb) {
                         } else {
                             console.log(collections);
                             async.every(collections, (col, callback) => {
-                                kernel.generateEntities(inputData, col, (err) => {
+                                kernel.generateEntities(db, col, (err) => {
                                     if (err) {
                                         callback(err, false)
                                     } else {

@@ -152,48 +152,25 @@ exports.connectToMongoDB = (dbInfo, callback) => {
     });
 }
 
-exports.generateEntities = (dbInfo, collectionName, callback) => {
-    var connectionString = '';
-
-    if (dbInfo.username == '' || dbInfo.password == '') {
-        connectionString = 'mongodb://' + dbInfo.host + ':' + dbInfo.port + '/' + dbInfo.dbName + dbInfo.optional;
-    } else {
-        connectionString = 'mongodb://' + dbInfo.username + ':' + dbInfo.password + '@' +
-            dbInfo.host + ':' + dbInfo.port + "/" + dbInfo.dbName + dbInfo.optional;
-    }
-    // Use connect method to connect to the server
-    console.log(info('Connecting to database . . . '));
-    MongoClient.connect(connectionString, { useNewUrlParser: true }, function (err, client) {
+exports.generateEntities = (db, collectionName, callback) => {
+    db.collection(collectionName).aggregate([
+        { $limit: 1 }
+    ], (err, data) => {
         if (err) {
-            console.log(error('❌ Failed to connect'));
             callback(err)
         } else {
-            console.log(success('✅ Connected successfully to database'));
+            data.toArray((err, docs) => {
+                docs = docs[0]
 
-            const db = client.db(dbInfo.dbName);
-            db.collection(collectionName).aggregate([
-                { $limit: 1 }
-            ], (err, data) => {
-                if (err) {
-                    callback(err)
-                } else {
-                    data.toArray((err, docs) => {
-                        docs = docs[0]
+                let keys = _.allKeys(docs),
+                    values = _.values(docs);
 
-                        let keys = _.allKeys(docs),
-                            values = _.values(docs);
+                typeList = _.map(keys, (k) => {
+                    console.log(k + ' ( ' + docs[k] + ' ) ' + ': ' + utils.Type.get(docs[k]));
+                })
 
-                        // console.log(keys);
-                        // console.log(values);
-
-                        typeList = _.map(keys, (k) => {
-                            console.log(k + ' ( ' + docs[k] + ' ) ' + ': ' + utils.Type.get(docs[k]));
-                        })
-
-                        callback(null)
-                    });
-                }
-            })
+                callback(null)
+            });
         }
-    });
+    })
 }
