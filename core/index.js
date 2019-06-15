@@ -103,6 +103,22 @@ exports.generateKernelFiles = function (root, inputData, cb) {
                                             }
                                         })
                                     }, callback)
+                                },
+
+                                // 3. Generate Data_Provider
+                                (callback) => {
+                                    console.log(info('\n🤹🏼‍ Generating Data_Provider . . . '));
+
+                                    async.every(collections, (col, callback) => {
+                                        kernel.generateDataProvider(db, col, (err) => {
+                                            if (err) {
+                                                callback(err, false)
+                                            } else {
+                                                console.log(success('   🥁  Generated `' + col + '` Data_Provider'));
+                                                callback(null, true)
+                                            }
+                                        })
+                                    }, callback)
                                 }
                             ], cb)
                         }
