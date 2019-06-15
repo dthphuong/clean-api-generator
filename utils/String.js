@@ -8,3 +8,23 @@ exports.trimKeywords = function (keyword) {
         return item.trim()
     })
 }
+
+//#region Upper Title case
+exports.toProperCase = (str) => {
+    return str.replace(
+        /(^|[\s\xA0])[^\s\xA0]/g,
+        function (txt) {
+            return txt.toUpperCase();
+        }
+    );
+}
+
+exports.toProperCase2 = (str) => {
+    return str.replace(
+        /(^|[\s\xA0])[^\s\xA0]/g,
+        function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        }
+    );
+}
+//#endregion
