@@ -42,7 +42,7 @@ exports.generateProjectStructure = function (root, inputData) {
 
         return 0;
     } catch (err) {
-        console.log(error('❌ ' + err));
+        console.log(error('❌ ' + utils.ErrorHandle.getErrorMessage(err)));
         return 1;
     }
 }
@@ -81,6 +81,6 @@ exports.generateKernelFiles = function (inputData, cb) {
 
         // console.log(success('✅ Generate Kernel files successfully --> Next !!!'));
     } catch (err) {
-        console.log(error('❌ ' + err));
+        cb(err, null)
     }
 }
