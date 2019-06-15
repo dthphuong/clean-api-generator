@@ -49,20 +49,33 @@ exports.generateProjectStructure = function (root, inputData) {
 
 exports.generateKernelFiles = function (inputData, cb) {
     try {
-        kernel.getCollections(inputData, (err, collections) => {
+        kernel.connectToMongoDB(inputData, (err, db) => {
             if (err) {
                 cb(err, null)
             } else {
-                console.log(collections);
-                async.every(collections, (col, callback) => {
-                    kernel.generateEntities(inputData, col, (err) => {
-                        if (err) {
-                            callback(err, false)
+                db.collections((err, collections) => {
+                    if (err) {
+                        console.log(error('❌  ' + err));
+                        cb(err, null);
+                    } else {
+                        collections = _.pluck(collections, 'collectionName')
+
+                        if (_.isEmpty(collections)) {
+                            cb(2, null); // empty collection
                         } else {
-                            callback(null, true)
+                            console.log(collections);
+                            async.every(collections, (col, callback) => {
+                                kernel.generateEntities(inputData, col, (err) => {
+                                    if (err) {
+                                        callback(err, false)
+                                    } else {
+                                        callback(null, true)
+                                    }
+                                })
+                            }, cb)
                         }
-                    })
-                }, cb)
+                    }
+                })
             }
         })
 
