@@ -65,26 +65,46 @@ exports.generateKernelFiles = function (root, inputData, cb) {
                         } else {
                             // console.log(collections);
                             kernel.root = root;
-                            console.log(info('\n🤹🏼‍ Generating Entities . . . '));
 
-                            let entityIndex = ''
+                            async.series([
+                                // 1. Generate Entities
+                                (callback) => {
+                                    console.log(info('\n🤹🏼‍ Generating Entities . . . '));
 
-                            _.each(collections, (colName) => {
-                                entityIndex = entityIndex + 'exports.' + utils.String.toProperCase(colName) + 'Entity = require("./' + colName + '").' + utils.String.toProperCase(colName) + 'Entity; \n'
-                            })
+                                    let entityIndex = ''
+                                    _.each(collections, (colName) => {
+                                        entityIndex = entityIndex + 'exports.' + utils.String.toProperCase(colName) + 'Entity = require("./' + colName + '").' + utils.String.toProperCase(colName) + 'Entity; \n'
+                                    })
+                                    fs.writeFileSync(root + '/core/entity/index.js', entityIndex, 'utf8');
 
-                            fs.writeFileSync(root + '/core/entity/index.js', entityIndex, 'utf8');
+                                    async.every(collections, (col, callback) => {
+                                        kernel.generateEntity(db, col, (err) => {
+                                            if (err) {
+                                                callback(err, false)
+                                            } else {
+                                                console.log(success('   🥁  Generated `' + col + '` entity'));
+                                                callback(null, true)
+                                            }
+                                        })
+                                    }, callback)
+                                },
 
-                            async.every(collections, (col, callback) => {
-                                kernel.generateEntity(db, col, (err) => {
-                                    if (err) {
-                                        callback(err, false)
-                                    } else {
-                                        console.log(success('   🥁  Generated `' + col + '` entity'));
-                                        callback(null, true)
-                                    }
-                                })
-                            }, cb)
+                                // 2. Generate Use_case
+                                (callback) => {
+                                    console.log(info('\n🤹🏼‍ Generating Use_case . . . '));
+
+                                    async.every(collections, (col, callback) => {
+                                        kernel.generateUseCase(col, (err) => {
+                                            if (err) {
+                                                callback(err, false)
+                                            } else {
+                                                console.log(success('   🥁  Generated `' + col + '` Use_case'));
+                                                callback(null, true)
+                                            }
+                                        })
+                                    }, callback)
+                                }
+                            ], cb)
                         }
                     }
                 })

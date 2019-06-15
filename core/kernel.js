@@ -193,3 +193,19 @@ exports.generateEntity = (db, collectionName, callback) => {
         }
     })
 }
+
+exports.generateUseCase = (collectionName, callback) => {
+    try {
+        let usecaseTemplate = fs.readFileSync(templatePath + 'use_case.js', 'utf8');
+
+        usecaseTemplate = usecaseTemplate
+            .replace(/___COLLECTION_NAME___/g, collectionName)
+            .replace(/___ID___/g, collectionName + 'Id')
+            .replace(/___DATA___/g, collectionName + 'Data')
+
+        fs.writeFileSync(this.root + '/core/use_case/' + collectionName + '.js', usecaseTemplate, 'utf8');
+        callback(null);
+    } catch (err) {
+        callback(err)
+    }
+}

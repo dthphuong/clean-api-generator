@@ -1,22 +1,21 @@
-var request = require('request');
-var DataProvider = require('../../data_provider/DBNAME');
+var DataProvider = require('../../data_provider/___COLLECTION_NAME___');
 
 exports.getAll = function (cb) {
     DataProvider.getAll(cb);
 }
 
-exports.getById = function (NAMEID, cb) {
-    DataProvider.getById(NAMEID, cb);
+exports.getById = function (___ID___, cb) {
+    DataProvider.getById(___ID___, cb);
 }
 
-exports.create = function (data, cb) {
-    DataProvider.create(data, cb);
+exports.create = function (___ID___, cb) {
+    DataProvider.create(___ID___, cb);
 }
 
-exports.delete = function (NAMEID, cb) {
-    DataProvider.delete(NAMEID, cb);
+exports.update = function (___DATA___, cb) {
+    DataProvider.update(___DATA___, cb);
 }
 
-exports.update = function (data, cb) {
-    DataProvider.update(data, cb);
+exports.delete = function (___ID___, cb) {
+    DataProvider.delete(___ID___, cb);
 }
