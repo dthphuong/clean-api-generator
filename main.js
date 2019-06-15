@@ -37,7 +37,7 @@ var inputData = {
 
     // database variables
     host: 'localhost',
-    port: 27017,
+    port: '27017',
     dbName: 'demo',
     username: '',
     password: '',
