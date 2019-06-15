@@ -131,10 +131,10 @@ exports.getCollections = (dbInfo, callback) => {
     var connectionString = '';
 
     if (dbInfo.username == '' || dbInfo.password == '') {
-        connectionString = 'mongodb://' + dbInfo.host + "/" + dbInfo.dbName + dbInfo.optional;
+        connectionString = 'mongodb://' + dbInfo.host + ':' + dbInfo.port + '/' + dbInfo.dbName + dbInfo.optional;
     } else {
         connectionString = 'mongodb://' + dbInfo.username + ':' + dbInfo.password + '@' +
-            dbInfo.host + "/" + dbInfo.dbName + dbInfo.optional;
+            dbInfo.host + ':' + dbInfo.port + "/" + dbInfo.dbName + dbInfo.optional;
     }
 
     // Use connect method to connect to the server
@@ -152,8 +152,6 @@ exports.getCollections = (dbInfo, callback) => {
                     callback(null, _.pluck(colList, 'collectionName'))
                 }
             })
-
-            client.close();
         }
     });
 }
@@ -162,12 +160,11 @@ exports.generateEntities = (dbInfo, collectionName, callback) => {
     var connectionString = '';
 
     if (dbInfo.username == '' || dbInfo.password == '') {
-        connectionString = 'mongodb://' + dbInfo.host + "/" + dbInfo.dbName + dbInfo.optional;
+        connectionString = 'mongodb://' + dbInfo.host + ':' + dbInfo.port + '/' + dbInfo.dbName + dbInfo.optional;
     } else {
         connectionString = 'mongodb://' + dbInfo.username + ':' + dbInfo.password + '@' +
-            dbInfo.host + "/" + dbInfo.dbName + dbInfo.optional;
+            dbInfo.host + ':' + dbInfo.port + "/" + dbInfo.dbName + dbInfo.optional;
     }
-
     // Use connect method to connect to the server
     MongoClient.connect(connectionString, function (err, client) {
         if (err) {
@@ -200,8 +197,6 @@ exports.generateEntities = (dbInfo, collectionName, callback) => {
                     });
                 }
             })
-
-            client.close();
         }
     });
 }
