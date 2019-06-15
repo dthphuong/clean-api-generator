@@ -7,6 +7,10 @@ const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const MongooseType = require('../utils/Type')
 
+const templatePath = __dirname + '/template/';
+
+exports.root = './';
+
 exports.generatePackageJSON = (root, projectInfo) => {
     var data = {
         "name": projectInfo.name,
@@ -138,13 +142,13 @@ exports.connectToMongoDB = (dbInfo, callback) => {
     }
 
     // Use connect method to connect to the server
-    console.log(info('Connecting to database . . . '));
+    console.log(info('🤹🏼‍ Connecting to database . . . '));
     MongoClient.connect(connectionString, { useNewUrlParser: true }, function (err, client) {
         if (err) {
-            console.log(error('❌ Failed to connect'));
+            console.log(error('   ❌ Failed to connect'));
             callback(err, null);
         } else {
-            console.log(success('✅ Connected successfully to database'));
+            console.log(success('   ✅ Connected successfully to database'));
 
             const db = client.db(dbInfo.dbName);
             callback(null, db);
@@ -152,24 +156,39 @@ exports.connectToMongoDB = (dbInfo, callback) => {
     });
 }
 
-exports.generateEntities = (db, collectionName, callback) => {
+exports.generateEntity = (db, collectionName, callback) => {
     db.collection(collectionName).aggregate([
         { $limit: 1 }
     ], (err, data) => {
         if (err) {
-            callback(err)
+            callback(err);
         } else {
             data.toArray((err, docs) => {
-                docs = docs[0]
+                let doc = docs[0];
 
-                let keys = _.allKeys(docs),
-                    values = _.values(docs);
+                let keys = _.allKeys(doc),
+                    values = _.values(doc);
 
-                typeList = _.map(keys, (k) => {
-                    console.log(k + ' ( ' + docs[k] + ' ) ' + ': ' + utils.Type.get(docs[k]));
+                let fieldsList = {}
+                _.each(keys, (k) => {
+                    fieldsList[k] = utils.Type.get(doc[k])
                 })
 
-                callback(null)
+                // Generate to file(s) here
+                try {
+                    let entityTemplate = fs.readFileSync(templatePath + 'entity.js', 'utf8');
+
+                    entityTemplate = entityTemplate
+                        .replace(/__SCHEMA_NAME__/g, utils.String.toProperCase(collectionName) + 'Schema')
+                        .replace(/__ENTITY_NAME__/g, utils.String.toProperCase(collectionName))
+                        .replace(/__COLLECTION_NAME__/g, collectionName)
+                        .replace(/__FIELDS_LIST__/g, JSON.stringify(fieldsList, null, 4))
+
+                    fs.writeFileSync(this.root + '/core/entity/' + collectionName + '.js', entityTemplate, 'utf8');
+                    callback(null);
+                } catch (err) {
+                    callback(err)
+                }
             });
         }
     })

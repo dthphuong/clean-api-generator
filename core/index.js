@@ -47,7 +47,7 @@ exports.generateProjectStructure = function (root, inputData) {
     }
 }
 
-exports.generateKernelFiles = function (inputData, cb) {
+exports.generateKernelFiles = function (root, inputData, cb) {
     try {
         kernel.connectToMongoDB(inputData, (err, db) => {
             if (err) {
@@ -63,12 +63,16 @@ exports.generateKernelFiles = function (inputData, cb) {
                         if (_.isEmpty(collections)) {
                             cb(2, null); // empty collection
                         } else {
-                            console.log(collections);
+                            // console.log(collections);
+                            kernel.root = root;
+
+                            console.log(info('\n🤹🏼‍ Generating Entities . . . '));
                             async.every(collections, (col, callback) => {
-                                kernel.generateEntities(db, col, (err) => {
+                                kernel.generateEntity(db, col, (err) => {
                                     if (err) {
                                         callback(err, false)
                                     } else {
+                                        console.log(success('   🥁  Generated `' + col + '` entity'));
                                         callback(null, true)
                                     }
                                 })
@@ -78,8 +82,6 @@ exports.generateKernelFiles = function (inputData, cb) {
                 })
             }
         })
-
-        // console.log(success('✅ Generate Kernel files successfully --> Next !!!'));
     } catch (err) {
         cb(err, null)
     }

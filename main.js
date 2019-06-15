@@ -116,12 +116,12 @@ async.series([
 
         root = inputData.output + '/' + inputData.name;
 
-        core.generateKernelFiles(inputData, function (err, data) {
+        core.generateKernelFiles(root, inputData, function (err, data) {
             if (err) {
                 console.log(error('❌  ' + utils.ErrorHandle.getErrorMessage(err)));
                 callback(1);
             } else {
-
+                console.log(success('\n✅ Generate Kernel files successfully --> Next !!!'));
                 callback();
             }
         });

@@ -11,7 +11,7 @@
 - [x] Generate file `server.js`
 - [x] Generate files in `utils` folder
 - [x] Generate file `config.js`
-- [ ] Generate Entities files
+- [x] Generate Entities files
 - [ ] Generate Data_provider files
 - [ ] Generate Use_case files
 - [ ] Generate Routes files
