@@ -14,8 +14,8 @@ switch (configType) {
     case 0: // Development environment
         exports.server = {
             port: 3000,
-            secret: '###FPO-secret###',
-            exptime: '604800',
+            secret: 'your-secet-key',
+            exptime: '600',
             base_url: 'http://localhost/',
             limiterMaxTime: 1 * 60 * 1000,
             limiterMaxRequestNormal: 100,
@@ -46,8 +46,8 @@ switch (configType) {
     case 1: // Production environment
         exports.server = {
             port: 8080,
-            secret: '###FPO-secret###',
-            exptime: '604800',
+            secret: 'your-secet-key',
+            exptime: '600',
             base_url: 'http://fpo.vn/',
             limiterMaxTime: 1 * 60 * 1000,
             limiterMaxRequestNormal: 100,
