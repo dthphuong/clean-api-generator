@@ -89,7 +89,23 @@ exports.generateKernelFiles = function (root, inputData, cb) {
                                     }, callback)
                                 },
 
-                                // 2. Generate Use_case
+                                // 2. Generate Data_Provider
+                                (callback) => {
+                                    console.log(info('\n🤹🏼‍ Generating Data_Provider . . . '));
+
+                                    async.every(collections, (col, callback) => {
+                                        kernel.generateDataProvider(db, col, (err) => {
+                                            if (err) {
+                                                callback(err, false)
+                                            } else {
+                                                console.log(success('   🥁  Generated `' + col + '` Data_Provider'));
+                                                callback(null, true)
+                                            }
+                                        })
+                                    }, callback)
+                                },
+
+                                // 3. Generate Use_case
                                 (callback) => {
                                     console.log(info('\n🤹🏼‍ Generating Use_case . . . '));
 
@@ -105,21 +121,53 @@ exports.generateKernelFiles = function (root, inputData, cb) {
                                     }, callback)
                                 },
 
-                                // 3. Generate Data_Provider
+                                // 4. Generate Routes
                                 (callback) => {
-                                    console.log(info('\n🤹🏼‍ Generating Data_Provider . . . '));
+                                    console.log(info('\n🤹🏼‍ Generating Routes . . . '));
 
+                                    // Generate Routes index
+                                    let routeIndex = "var sysRoute = require('./system');\n";
+
+                                    _.each(collections, (colName) => {
+                                        routeIndex += "var " + utils.String.toProperCase(colName) + " = require('./" + colName + "');\n";
+                                    })
+
+                                    routeIndex += "\n\n";
+                                    routeIndex += "exports.assignAPIRoutes = function (app) {\n"
+                                    routeIndex += "\tapp.get('/', (req, res) => {\n" +
+                                        "\t\treturn res.send('Hello world ! Welcome to Clean architecture for Node.JS project')\n" +
+                                        "\t});\n\n"
+                                    routeIndex += "\t//#region System route\n"
+                                    routeIndex += "\tapp.post('/system/decode', sysRoute.decode);\n"
+
+                                    _.each(collections, (colName) => {
+                                        routeIndex += "\n\t//#region " + utils.String.toProperCase(colName) + " route\n"
+
+                                        routeIndex += "\tapp.post('/" + colName + "/getAll', " + utils.String.toProperCase(colName) + ".getAll);\n";
+                                        routeIndex += "\tapp.post('/" + colName + "/getById', " + utils.String.toProperCase(colName) + ".getById);\n";
+                                        routeIndex += "\tapp.post('/" + colName + "/create', " + utils.String.toProperCase(colName) + ".create);\n";
+                                        routeIndex += "\tapp.post('/" + colName + "/update', " + utils.String.toProperCase(colName) + ".update);\n";
+                                        routeIndex += "\tapp.post('/" + colName + "/delete', " + utils.String.toProperCase(colName) + ".delete);\n";
+                                    })
+                                    routeIndex += "}"
+
+                                    fs.writeFileSync(root + '/routes/index.js', routeIndex, 'utf8');
+
+                                    // Copy Route system
+                                    fs.copyFileSync(__dirname + '/template/systemRoute.js', root + '/routes/system.js');
+
+                                    // Generate Route file(s)
                                     async.every(collections, (col, callback) => {
-                                        kernel.generateDataProvider(db, col, (err) => {
+                                        kernel.generateRoute(col, (err) => {
                                             if (err) {
                                                 callback(err, false)
                                             } else {
-                                                console.log(success('   🥁  Generated `' + col + '` Data_Provider'));
+                                                console.log(success('   🥁  Generated `' + col + '` route'));
                                                 callback(null, true)
                                             }
                                         })
                                     }, callback)
-                                }
+                                },
                             ], cb)
                         }
                     }

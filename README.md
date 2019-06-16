@@ -14,5 +14,5 @@
 - [x] Generate Entities files
 - [x] Generate Data_provider files
 - [x] Generate Use_case files
-- [ ] Generate Routes files
-
+- [x] Generate Routes files
+- [ ] Test phrase

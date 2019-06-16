@@ -267,3 +267,18 @@ exports.generateDataProvider = (db, collectionName, callback) => {
         callback(err)
     }
 }
+
+exports.generateRoute = (collectionName, callback) => {
+    try {
+        let routeTemplate = fs.readFileSync(templatePath + 'route.js', 'utf8');
+
+        routeTemplate = routeTemplate
+            .replace(/___COLLECTION_NAME___/g, collectionName)
+            .replace(/___ID___/g, collectionName + 'Id')
+
+        fs.writeFileSync(this.root + '/routes/' + collectionName + '.js', routeTemplate, 'utf8');
+        callback(null);
+    } catch (err) {
+        callback(err)
+    }
+}
