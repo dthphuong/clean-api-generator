@@ -69,7 +69,7 @@ exports.generatePackageJSON = (root, projectInfo) => {
     }
     try {
         fs.writeFileSync(root + '/package.json', JSON.stringify(data, null, 4))
-        console.log(success('✅ Generate `package.json` file successfully!!!'));
+        console.log(success('✅ Generate `package.json` file successfully --> Next !!!'));
     } catch (err) {
         throw err;
     }
@@ -79,7 +79,7 @@ exports.generateREADME = (root) => {
     try {
         let readmeData = fs.readFileSync(__dirname + '/template/README.md');
         fs.writeFileSync(root + '/README.md', readmeData);
-        console.log(success('✅ Generate `README.md` file successfully!!!'));
+        console.log(success('✅ Generate `README.md` file successfully --> Next !!!'));
     } catch (err) {
         throw err;
     }
@@ -89,7 +89,7 @@ exports.generateGitignore = (root) => {
     try {
         let gitignoreData = fs.readFileSync(__dirname + '/template/.gitignore');
         fs.writeFileSync(root + '/.gitignore', gitignoreData);
-        console.log(success('✅ Generate `.gitignore` file successfully!!!'));
+        console.log(success('✅ Generate `.gitignore` file successfully --> Next !!!'));
     } catch (err) {
         throw err;
     }
@@ -99,7 +99,7 @@ exports.generateServer = (root) => {
     try {
         let serverData = fs.readFileSync(__dirname + '/template/server.js');
         fs.writeFileSync(root + '/server.js', serverData);
-        console.log(success('✅ Generate `server.js` file successfully!!!'));
+        console.log(success('✅ Generate `server.js` file successfully --> Next !!!'));
     } catch (err) {
         throw err;
     }
@@ -114,7 +114,7 @@ exports.generateUtilsDir = (root) => {
             }
         })
 
-        console.log(success('✅ Generate utils directory successfully!!!'));
+        console.log(success('✅ Generate utils directory successfully --> Next !!!'));
     } catch (err) {
         throw err;
     }
@@ -130,7 +130,7 @@ exports.generateConfig = (root, databaseInfo) => {
             .replace(new RegExp('PASSWORD', 'g'), databaseInfo.password)
             .replace(new RegExp('OPTIONAL', 'g'), databaseInfo.optional)
         fs.writeFileSync(root + '/config/index.js', configData);
-        console.log(success('✅ Generate `config.js` file successfully!!!'));
+        console.log(success('✅ Generate `config.js` file successfully --> Next !!!'));
     } catch (err) {
         throw err;
     }
@@ -171,12 +171,11 @@ exports.generateEntity = (db, collectionName, callback) => {
             data.toArray((err, docs) => {
                 let doc = docs[0];
 
-                let keys = _.allKeys(doc),
-                    values = _.values(doc);
+                let keys = _.allKeys(doc);
 
                 let fieldsList = {}
                 _.each(keys, (k) => {
-                    fieldsList[k] = utils.Type.get(values[k])
+                    fieldsList[k] = "===" + utils.Type.get(doc[k]) + "==="
                 })
 
                 // Generate to file(s) here
@@ -188,6 +187,8 @@ exports.generateEntity = (db, collectionName, callback) => {
                         .replace(/__ENTITY_NAME__/g, utils.String.toProperCase(collectionName))
                         .replace(/__COLLECTION_NAME__/g, collectionName)
                         .replace(/__FIELDS_LIST__/g, JSON.stringify(fieldsList, null, 4))
+                        .replace(/\"===/g, '')
+                        .replace(/===\"/g, '')
 
                     fs.writeFileSync(this.root + '/core/entity/' + collectionName + '.js', entityTemplate, 'utf8');
                     callback(null);
