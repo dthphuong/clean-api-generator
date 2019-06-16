@@ -1,3 +1,8 @@
+/**
+ * Created by FPO Co.,Ltd - June 2019
+ * Website: http://fpo.vn
+ * Email: contact@fpo.vn
+ */
 var DataProvider = require('../../data_provider/___COLLECTION_NAME___');
 
 exports.getAll = function (cb) {

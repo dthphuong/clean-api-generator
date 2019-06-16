@@ -1,9 +1,14 @@
+/**
+ * Created by FPO Co.,Ltd - June 2019
+ * Website: http://fpo.vn
+ * Email: contact@fpo.vn
+ */
 var mongoose = require('mongoose')
 var async = require('async'),
     _ = require('underscore'),
-    util = require('../util');
+    utils = require('../utils');
 
-var MongoConnect = require('../util/MongoConnect'),
+var MongoConnect = require('../utils/MongoConnect'),
     Entity = require('../core/entity');
 
 exports.getAll = function (cb) {

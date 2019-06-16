@@ -1,3 +1,8 @@
+/**
+ * Created by FPO Co.,Ltd - June 2019
+ * Website: http://fpo.vn
+ * Email: contact@fpo.vn
+ */
 var mongoose = require("mongoose");
 (Schema = mongoose.Schema), (ObjectId = Schema.ObjectId);
 require('mongoose-double')(mongoose);

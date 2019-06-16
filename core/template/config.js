@@ -1,4 +1,9 @@
 /**
+ * Created by FPO Co.,Ltd - June 2019
+ * Website: http://fpo.vn
+ * Email: contact@fpo.vn
+ */
+/**
  * configType = 0 is Development environment
  * configType = 1 is Production environment
  */
