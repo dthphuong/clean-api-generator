@@ -184,7 +184,7 @@ exports.generateEntity = (db, collectionName, callback) => {
 
                     entityTemplate = entityTemplate
                         .replace(/__SCHEMA_NAME__/g, utils.String.toProperCase(collectionName) + 'Schema')
-                        .replace(/__ENTITY_NAME__/g, utils.String.toProperCase(collectionName))
+                        .replace(/__ENTITY_NAME__/g, utils.String.toProperCase(collectionName) + 'Entity')
                         .replace(/__COLLECTION_NAME__/g, collectionName)
                         .replace(/__FIELDS_LIST__/g, JSON.stringify(fieldsList, null, 4))
                         .replace(/\"===/g, '')

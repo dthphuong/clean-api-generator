@@ -143,6 +143,7 @@ exports.generateKernelFiles = function (root, inputData, cb) {
                                         "\t});\n\n"
                                     routeIndex += "\t//#region System route\n"
                                     routeIndex += "\tapp.post('/system/decode', sysRoute.decode);\n"
+                                    routeIndex += "\tapp.post('/oauth', sysRoute.oauth);\n"
 
                                     _.each(collections, (colName) => {
                                         routeIndex += "\n\t//#region " + utils.String.toProperCase(colName) + " route\n"
