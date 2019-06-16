@@ -15,4 +15,4 @@
 - [x] Generate Data_provider files
 - [x] Generate Use_case files
 - [x] Generate Routes files
-- [ ] Test phrase
+- [x] Test phrase
