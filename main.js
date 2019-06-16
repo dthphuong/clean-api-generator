@@ -1,6 +1,10 @@
 /**
- * Created by Phuong Duong on 07/06/2019
+ * Created by FPO Co.,Ltd - June 2019
+ * Website: http://fpo.vn
+ * Email: contact@fpo.vn
  */
+'use strict'
+
 global._ = require('underscore');
 global.utils = require('./utils');
 global.fs = require('fs');
@@ -121,7 +125,7 @@ async.series([
                 console.log(error('❌  ' + utils.ErrorHandle.getErrorMessage(err)));
                 callback(1);
             } else {
-                console.log(success('\n✅ Generate Kernel files successfully --> Next !!!'));
+                console.log(success('\n✅ Generate Kernel files successfully !!!'));
                 callback();
             }
         });

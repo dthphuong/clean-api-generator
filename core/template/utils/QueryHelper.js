@@ -1,3 +1,10 @@
+/**
+ * Created by FPO Co.,Ltd - June 2019
+ * Website: http://fpo.vn
+ * Email: contact@fpo.vn
+ */
+'use strict'
+
 const _ = require('underscore'),
     IO = require('./IO');
 var async = require('async');

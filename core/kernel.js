@@ -1,6 +1,10 @@
 /**
- * Created by Phuong Duong on 14/06/2019
+ * Created by FPO Co.,Ltd - June 2019
+ * Website: http://fpo.vn
+ * Email: contact@fpo.vn
  */
+'use strict'
+
 const { exec } = require('child_process');
 const async = require('async');
 const MongoClient = require('mongodb').MongoClient;
