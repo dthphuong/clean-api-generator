@@ -16,11 +16,11 @@ exports.getAll = function (cb) {
         .then(db => {
             async.waterfall([
                 function (callback) {
-                    Entity.___ENTITY_NAME___.aggregate([], function (err, result) {
+                    Entity.___ENTITY_NAME___.find({}, function (err, result) {
                         if (err) {
                             callback(err, null)
                         } else {
-                            if (_.isEmpty(result)) {
+                            if (!_.isEmpty(result)) {
                                 callback(null, result)
                             } else {
                                 callback(2, null)
@@ -49,7 +49,7 @@ exports.getById = function (___ID___, cb) {
                         if (err) {
                             callback(err, null)
                         } else {
-                            if (_.isEmpty(result)) {
+                            if (!_.isEmpty(result)) {
                                 callback(null, result[0])
                             } else {
                                 callback(3, null)
