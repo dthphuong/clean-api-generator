@@ -69,7 +69,7 @@ exports.generatePackageJSON = (root, projectInfo) => {
     }
     try {
         fs.writeFileSync(root + '/package.json', JSON.stringify(data, null, 4))
-        console.log(success('✅ Generate `package.json` file successfully --> Next !!!'));
+        console.log(success('✅ Generate `package.json` file successfully!!!'));
     } catch (err) {
         throw err;
     }
@@ -79,7 +79,7 @@ exports.generateREADME = (root) => {
     try {
         let readmeData = fs.readFileSync(__dirname + '/template/README.md');
         fs.writeFileSync(root + '/README.md', readmeData);
-        console.log(success('✅ Generate `README.md` file successfully --> Next !!!'));
+        console.log(success('✅ Generate `README.md` file successfully!!!'));
     } catch (err) {
         throw err;
     }
@@ -89,7 +89,7 @@ exports.generateGitignore = (root) => {
     try {
         let gitignoreData = fs.readFileSync(__dirname + '/template/.gitignore');
         fs.writeFileSync(root + '/.gitignore', gitignoreData);
-        console.log(success('✅ Generate `.gitignore` file successfully --> Next !!!'));
+        console.log(success('✅ Generate `.gitignore` file successfully!!!'));
     } catch (err) {
         throw err;
     }
@@ -99,7 +99,7 @@ exports.generateServer = (root) => {
     try {
         let serverData = fs.readFileSync(__dirname + '/template/server.js');
         fs.writeFileSync(root + '/server.js', serverData);
-        console.log(success('✅ Generate `server.js` file successfully --> Next !!!'));
+        console.log(success('✅ Generate `server.js` file successfully!!!'));
     } catch (err) {
         throw err;
     }
@@ -114,7 +114,7 @@ exports.generateUtilsDir = (root) => {
             }
         })
 
-        console.log(success('✅ Generate utils directory successfully --> Next !!!'));
+        console.log(success('✅ Generate utils directory successfully!!!'));
     } catch (err) {
         throw err;
     }
@@ -130,7 +130,7 @@ exports.generateConfig = (root, databaseInfo) => {
             .replace(new RegExp('PASSWORD', 'g'), databaseInfo.password)
             .replace(new RegExp('OPTIONAL', 'g'), databaseInfo.optional)
         fs.writeFileSync(root + '/config/index.js', configData);
-        console.log(success('✅ Generate `config.js` file successfully --> Next !!!'));
+        console.log(success('✅ Generate `config.js` file successfully!!!'));
     } catch (err) {
         throw err;
     }

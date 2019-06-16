@@ -78,7 +78,7 @@ async.series([
     //#region _____GENERATE_PROJECT_STRUCTURE_____
     (callback) => {
         var exitcode = 0;
-        console.log(announce('__________________________________________________________________'));
+        console.log(announce('\n__________________________________________________________________'));
         console.log(announce('____________________Generate project structure____________________'));
         console.log(announce('__________________________________________________________________'));
 
@@ -91,14 +91,14 @@ async.series([
             // Generate project structure
             exitcode = core.generateProjectStructure(root, inputData)
         } else {
-            console.log(success('✅ Folder [' + root + '] exist --> Next !!!'));
+            console.log(success('✅ Folder [' + root + '] exist!!!'));
 
             // Check empty project folder
             if (fs.readdirSync(root).length > 0) {
                 console.log(error('❌ Folder [' + root + '] is not empty. Please try again !'));
                 exitcode = 1
             } else {
-                console.log(success('✅ Folder [' + root + '] is empty --> Next !!!'));
+                console.log(success('✅ Folder [' + root + '] is empty!!!'));
 
                 // Generate project structure
                 exitcode = core.generateProjectStructure(root, inputData)
@@ -114,7 +114,7 @@ async.series([
     //#endregion
     //#region _____GENERATE_CORE_FILES_BASED_ON_DATABASE_____
     (callback) => {
-        console.log(announce('__________________________________________________________________'));
+        console.log(announce('\n__________________________________________________________________'));
         console.log(announce('_______________Generate core files based on Database______________'));
         console.log(announce('__________________________________________________________________'));
 
@@ -129,6 +129,34 @@ async.series([
                 callback();
             }
         });
+    },
+    //#endregion
+    //#region _____FINALIZE_GENERATE_PROCESS_____
+    (callback) => {
+        console.log(announce('\n__________________________________________________________________'));
+        console.log(announce('_____________________Finalize generate process____________________'));
+        console.log(announce('__________________________________________________________________'));
+
+        console.log(info('🗃  Your project structure in `' + root + '`'));
+        console.log('|___config');
+        console.log('|___core');
+        console.log('|   |___entity');
+        console.log('|   |___use_case');
+        console.log('|___data_provider');
+        console.log('|___logs');
+        console.log('|___routes');
+        console.log('|___utils');
+        console.log('|   .gitignore');
+        console.log('|   package.json');
+        console.log('|   README.md');
+        console.log('|   server.js');
+
+        console.log(info('\n🚀  Let\'s run the following command to begin: '));
+        console.log(success('   🎯 cd ' + root));
+        console.log(success('   🎯 npm install'));
+        console.log(success('   🎯 node server.js'));
+
+        callback();
     }
     //#endregion
 ], (exitcode) => {

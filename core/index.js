@@ -22,7 +22,7 @@ exports.generateProjectStructure = function (root, inputData) {
         fs.mkdirSync(root + '/logs');
         fs.mkdirSync(root + '/routes');
         fs.mkdirSync(root + '/utils');
-        console.log(success('✅ Generate folder structure successfully --> Next !!!'));
+        console.log(success('✅ Generate folder structure successfully!!!'));
 
         // Generate file`package.json`
         kernel.generatePackageJSON(root, inputData);
@@ -42,7 +42,7 @@ exports.generateProjectStructure = function (root, inputData) {
         // Generate file`config.js`
         kernel.generateConfig(root, inputData);
 
-        console.log(success('✅ Generate utils directory successfully --> Next !!!'));
+        console.log(success('✅ Generate utils directory successfully!!!'));
 
         return 0;
     } catch (err) {
