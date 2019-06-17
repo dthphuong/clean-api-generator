@@ -1,4 +1,9 @@
 /**
+ * Created by FPO Co.,Ltd - June 2019
+ * Website: http://fpo.vn
+ * Email: contact@fpo.vn
+ */
+/**
  * configType = 0 is Development environment
  * configType = 1 is Production environment
  */
@@ -9,8 +14,8 @@ switch (configType) {
     case 0: // Development environment
         exports.server = {
             port: 3000,
-            secret: '###FPO-secret###',
-            exptime: '604800',
+            secret: 'your-secet-key',
+            exptime: '600',
             base_url: 'http://localhost/',
             limiterMaxTime: 1 * 60 * 1000,
             limiterMaxRequestNormal: 100,
@@ -40,9 +45,9 @@ switch (configType) {
         break;
     case 1: // Production environment
         exports.server = {
-            port: 8087,
-            secret: '###FPO-secret###',
-            exptime: '604800',
+            port: 8080,
+            secret: 'your-secet-key',
+            exptime: '600',
             base_url: 'http://fpo.vn/',
             limiterMaxTime: 1 * 60 * 1000,
             limiterMaxRequestNormal: 100,
@@ -61,13 +66,13 @@ switch (configType) {
             password: 'PASSWORD',
             optional: 'OPTIONAL'
         }
-        exports.ffmpegPath = "C:\\ffmpeg\\bin\\ffmpeg.exe";
-        exports.ffprobePath = "C:\\ffmpeg\\bin\\ffprobe.exe";
-        exports.tempPhotoPath = "C:\\FPO\\___temp-photo\\";
+        exports.ffmpegPath = home + "/usr/bin/ffmpeg";
+        exports.ffprobePath = home + "/usr/bin/ffprobe";
+        exports.tempPhotoPath = home + "/upload/";
         exports.apiPath = "/home/youth-app-api/";
-        exports.webPath = "C:\\FPO\\qrscan\\";
-        exports.assetWebPath = "C:\\FPO\\qrscan\\";
-        exports.thumbWebPath = "C:\\FPO\\qrscan\\thumb\\";
-        exports.defaultAvatar = "/images/contacts/user_empty.png";
+        exports.webPath = "/var/www/html/asset/";
+        exports.assetWebPath = "/var/www/html/asset/";
+        exports.thumbWebPath = "/var/www/html/thumbs/";
+        exports.defaultAvatar = "layout/images/user.png";
         break;
 }

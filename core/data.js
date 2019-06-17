@@ -1,6 +1,10 @@
 /**
- * Created by Phuong Duong on 08/06/2019
+ * Created by FPO Co.,Ltd - June 2019
+ * Website: http://fpo.vn
+ * Email: contact@fpo.vn
  */
+'use strict'
+
 const readline = require('readline');
 const async = require('async');
 
@@ -69,7 +73,7 @@ exports.read = function (inputData, cb) {
             })
         },
         (callback) => {
-            console.log(comment('_______________________________________________________'));
+            console.log(comment('\n_______________________________________________________'));
             console.log(comment('____________________Database config____________________'));
             console.log(comment('_______________________________________________________'));
             rl.question(success('🌐 host: (localhost) '), (answer) => {

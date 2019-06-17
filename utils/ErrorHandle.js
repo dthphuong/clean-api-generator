@@ -1,11 +1,8 @@
 /**
- * Created by FPO Co.,Ltd - June 2019
- * Website: http://fpo.vn
- * Email: contact@fpo.vn
+ * Created by Phuong Duong on 24/09/2018
  */
 'use strict'
 
-var _ = require('underscore')
 var errorTable = [{
     'code': 0,
     'message': 'Unexpected error'

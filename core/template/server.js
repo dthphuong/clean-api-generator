@@ -1,5 +1,7 @@
 /**
- * Created by Phuong Duong on 24/09/2018
+ * Created by FPO Co.,Ltd - June 2019
+ * Website: http://fpo.vn
+ * Email: contact@fpo.vn
  */
 "use strict";
 
@@ -7,9 +9,9 @@ global.config = require("./config");
 global._ = require("underscore");
 var express = require("express"),
   bodyParser = require("body-parser"),
-  util = require('./util'),
-  jwt = require("./util/JWT"),
-  limiter = require('./util/Limiter'),
+  util = require('./utils'),
+  jwt = require("./utils/JWT"),
+  limiter = require('./utils/Limiter'),
   fs = require('fs');
 var app = express();
 

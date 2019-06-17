@@ -1,136 +1,15 @@
 /**
- * Created by Phuong Duong on 08/06/2019
+ * Created by FPO Co.,Ltd - June 2019
+ * Website: http://fpo.vn
+ * Email: contact@fpo.vn
  */
+'use strict'
 
-exports.data = require('./data')
+const { exec } = require('child_process');
+const kernel = require('./kernel');
+const async = require('async');
 
-function generatePackageJSON(root, projectInfo) {
-    var data = {
-        "name": projectInfo.name,
-        "version": projectInfo.version,
-        "description": projectInfo.description,
-        "main": projectInfo.main,
-        "scripts": {
-            "test": "echo \"Error: no test specified\" && exit 1"
-        },
-        "keywords": projectInfo.keywords,
-        "author": projectInfo.author,
-        "license": projectInfo.license,
-        "dependencies": {
-            "async": "^2.6.0",
-            "body-parser": "^1.18.2",
-            "crypto-js": "^3.1.9-1",
-            "express": "^4.16.2",
-            "express-mailer": "^0.3.1",
-            "express-rate-limit": "^3.4.0",
-            "fcm-node": "^1.3.0",
-            "fluent-ffmpeg": "^2.1.2",
-            "formidable": "^1.1.1",
-            "fs-extra": "^8.0.1",
-            "jsonwebtoken": "^8.1.1",
-            "mongoose": "^5.0.3",
-            "mongoose-double": "0.0.1",
-            "nodemailer": "^4.6.8",
-            "randomstring": "^1.1.5",
-            "request": "^2.83.0",
-            "sharp": "^0.21.0",
-            "slice": "^1.0.0",
-            "socket.io": "^2.2.0",
-            "underscore": "^1.9.1"
-        }
-    }
-
-    if (projectInfo.repo != '') {
-        data.repository = {
-            "type": "git",
-            "url": "git+" + projectInfo.repo + ".git"
-        }
-
-        data.bugs = {
-            "url": projectInfo.repo + "/issues"
-        }
-
-        data.hompage = projectInfo.repo + "#readme"
-    }
-    try {
-        fs.writeFileSync(root + '/package.json', JSON.stringify(data, null, 4))
-        console.log(success('✅ Generate `package.json` file successfully --> Next !!!'));
-    } catch (err) {
-        throw err;
-    }
-}
-
-function generateREADME(root) {
-    try {
-        let readmeData = fs.readFileSync(__dirname + '/template/README.md');
-        fs.writeFileSync(root + '/README.md', readmeData);
-        console.log(success('✅ Generate `README.md` file successfully --> Next !!!'));
-    } catch (err) {
-        throw err;
-    }
-}
-
-function generateGitignore(root) {
-    try {
-        let gitignoreData = fs.readFileSync(__dirname + '/template/.gitignore');
-        fs.writeFileSync(root + '/.gitignore', gitignoreData);
-        console.log(success('✅ Generate `.gitignore` file successfully --> Next !!!'));
-    } catch (err) {
-        throw err;
-    }
-}
-
-function generateServer(root) {
-    try {
-        let serverData = fs.readFileSync(__dirname + '/template/server.js');
-        fs.writeFileSync(root + '/server.js', serverData);
-        console.log(success('✅ Generate `server.js` file successfully --> Next !!!'));
-    } catch (err) {
-        throw err;
-    }
-}
-
-function generateUtilsFile(root) {
-    try {
-        let datetimeData = fs.readFileSync(__dirname + '/template/utils/DateTime.js');
-        fs.writeFileSync(root + '/utils/DateTime.js', datetimeData);
-
-        let errorHandleData = fs.readFileSync(__dirname + '/template/utils/ErrorHandle.js');
-        fs.writeFileSync(root + '/utils/ErrorHandle.js', errorHandleData);
-
-        let indexData = fs.readFileSync(__dirname + '/template/utils/index.js');
-        fs.writeFileSync(root + '/utils/index.js', indexData);
-
-        let iOData = fs.readFileSync(__dirname + '/template/utils/IO.js');
-        fs.writeFileSync(root + '/utils/IO.js', iOData);
-
-        let limiterData = fs.readFileSync(__dirname + '/template/utils/Limiter.js');
-        fs.writeFileSync(root + '/utils/Limiter.js', limiterData);
-
-        let mongoData = fs.readFileSync(__dirname + '/template/utils/MongoConnect.js');
-        fs.writeFileSync(root + '/utils/MongoConnect.js', mongoData);
-        console.log(success('✅ Generate files in util successfully --> Next !!!'));
-    } catch (err) {
-        throw err;
-    }
-}
-
-
-function generateConfig(root, databaseInfo) {
-    try {
-        let configData = fs.readFileSync(__dirname + '/template/config.js').toString()
-            .replace(new RegExp('HOST', 'g'), databaseInfo.host)
-            .replace(new RegExp('PORT', 'g'), databaseInfo.port)
-            .replace(new RegExp('DBNAME', 'g'), databaseInfo.dbName)
-            .replace(new RegExp('USERNAME', 'g'), databaseInfo.username)
-            .replace(new RegExp('PASSWORD', 'g'), databaseInfo.password)
-            .replace(new RegExp('OPTIONAL', 'g'), databaseInfo.optional)
-        fs.writeFileSync(root + '/config/index.js', configData);
-        console.log(success('✅ Generate `config.js` file successfully --> Next !!!'));
-    } catch (err) {
-        throw err;
-    }
-}
+exports.data = require('./data');
 
 exports.generateProjectStructure = function (root, inputData) {
     try {
@@ -143,29 +22,164 @@ exports.generateProjectStructure = function (root, inputData) {
         fs.mkdirSync(root + '/logs');
         fs.mkdirSync(root + '/routes');
         fs.mkdirSync(root + '/utils');
-        console.log(success('✅ Generate folder structure successfully --> Next !!!'));
+        console.log(success('✅ Generate folder structure successfully!!!'));
 
         // Generate file`package.json`
-        generatePackageJSON(root, inputData);
+        kernel.generatePackageJSON(root, inputData);
 
         // Generate file`README.md`
-        generateREADME(root);
+        kernel.generateREADME(root);
 
         // Generate file`.gitignore`
-        generateGitignore(root);
+        kernel.generateGitignore(root);
 
         // Generate file`server.js`
-        generateServer(root);
+        kernel.generateServer(root);
 
         // Generate files in `utils` folder
-        generateUtilsFile(root)
+        kernel.generateUtilsDir(root);
 
         // Generate file`config.js`
-        generateConfig(root, inputData)
+        kernel.generateConfig(root, inputData);
+
+        console.log(success('✅ Generate utils directory successfully!!!'));
 
         return 0;
     } catch (err) {
-        console.log(error('❌ ' + err));
+        console.log(error('❌ ' + utils.ErrorHandle.getErrorMessage(err)));
         return 1;
+    }
+}
+
+exports.generateKernelFiles = function (root, inputData, cb) {
+    try {
+        kernel.connectToMongoDB(inputData, (err, db) => {
+            if (err) {
+                cb(err, null)
+            } else {
+                db.collections((err, collections) => {
+                    if (err) {
+                        console.log(error('❌  ' + err));
+                        cb(err, null);
+                    } else {
+                        collections = _.pluck(collections, 'collectionName')
+
+                        if (_.isEmpty(collections)) {
+                            cb(2, null); // empty collection
+                        } else {
+                            // console.log(collections);
+                            kernel.root = root;
+
+                            async.series([
+                                // 1. Generate Entities
+                                (callback) => {
+                                    console.log(info('\n🤹🏼‍ Generating Entities . . . '));
+
+                                    let entityIndex = ''
+                                    _.each(collections, (colName) => {
+                                        entityIndex = entityIndex + 'exports.' + utils.String.toProperCase(colName) + 'Entity = require("./' + colName + '").' + utils.String.toProperCase(colName) + 'Entity; \n'
+                                    })
+                                    fs.writeFileSync(root + '/core/entity/index.js', entityIndex, 'utf8');
+
+                                    async.every(collections, (col, callback) => {
+                                        kernel.generateEntity(db, col, (err) => {
+                                            if (err) {
+                                                callback(err, false)
+                                            } else {
+                                                console.log(success('   🥁  Generated `' + col + '` entity'));
+                                                callback(null, true)
+                                            }
+                                        })
+                                    }, callback)
+                                },
+
+                                // 2. Generate Data_Provider
+                                (callback) => {
+                                    console.log(info('\n🤹🏼‍ Generating Data_Provider . . . '));
+
+                                    async.every(collections, (col, callback) => {
+                                        kernel.generateDataProvider(db, col, (err) => {
+                                            if (err) {
+                                                callback(err, false)
+                                            } else {
+                                                console.log(success('   🥁  Generated `' + col + '` Data_Provider'));
+                                                callback(null, true)
+                                            }
+                                        })
+                                    }, callback)
+                                },
+
+                                // 3. Generate Use_case
+                                (callback) => {
+                                    console.log(info('\n🤹🏼‍ Generating Use_case . . . '));
+
+                                    async.every(collections, (col, callback) => {
+                                        kernel.generateUseCase(col, (err) => {
+                                            if (err) {
+                                                callback(err, false)
+                                            } else {
+                                                console.log(success('   🥁  Generated `' + col + '` Use_case'));
+                                                callback(null, true)
+                                            }
+                                        })
+                                    }, callback)
+                                },
+
+                                // 4. Generate Routes
+                                (callback) => {
+                                    console.log(info('\n🤹🏼‍ Generating Routes . . . '));
+
+                                    // Generate Routes index
+                                    let routeIndex = "var sysRoute = require('./system');\n";
+
+                                    _.each(collections, (colName) => {
+                                        routeIndex += "var " + utils.String.toProperCase(colName) + " = require('./" + colName + "');\n";
+                                    })
+
+                                    routeIndex += "\n\n";
+                                    routeIndex += "exports.assignAPIRoutes = function (app) {\n"
+                                    routeIndex += "\tapp.get('/', (req, res) => {\n" +
+                                        "\t\treturn res.send('Hello world ! Welcome to Clean architecture for Node.JS project')\n" +
+                                        "\t});\n\n"
+                                    routeIndex += "\t//#region System route\n"
+                                    routeIndex += "\tapp.post('/system/decode', sysRoute.decode);\n"
+                                    routeIndex += "\tapp.post('/oauth', sysRoute.oauth);\n"
+
+                                    _.each(collections, (colName) => {
+                                        routeIndex += "\n\t//#region " + utils.String.toProperCase(colName) + " route\n"
+
+                                        routeIndex += "\tapp.post('/" + colName + "/getAll', " + utils.String.toProperCase(colName) + ".getAll);\n";
+                                        routeIndex += "\tapp.post('/" + colName + "/getById', " + utils.String.toProperCase(colName) + ".getById);\n";
+                                        routeIndex += "\tapp.post('/" + colName + "/create', " + utils.String.toProperCase(colName) + ".create);\n";
+                                        routeIndex += "\tapp.post('/" + colName + "/update', " + utils.String.toProperCase(colName) + ".update);\n";
+                                        routeIndex += "\tapp.post('/" + colName + "/delete', " + utils.String.toProperCase(colName) + ".delete);\n";
+                                    })
+                                    routeIndex += "}"
+
+                                    fs.writeFileSync(root + '/routes/index.js', routeIndex, 'utf8');
+
+                                    // Copy Route system
+                                    fs.copyFileSync(__dirname + '/template/systemRoute.js', root + '/routes/system.js');
+
+                                    // Generate Route file(s)
+                                    async.every(collections, (col, callback) => {
+                                        kernel.generateRoute(col, (err) => {
+                                            if (err) {
+                                                callback(err, false)
+                                            } else {
+                                                console.log(success('   🥁  Generated `' + col + '` route'));
+                                                callback(null, true)
+                                            }
+                                        })
+                                    }, callback)
+                                },
+                            ], cb)
+                        }
+                    }
+                })
+            }
+        })
+    } catch (err) {
+        cb(err, null)
     }
 }

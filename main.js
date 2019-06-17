@@ -1,6 +1,10 @@
 /**
- * Created by Phuong Duong on 07/06/2019
+ * Created by FPO Co.,Ltd - June 2019
+ * Website: http://fpo.vn
+ * Email: contact@fpo.vn
  */
+'use strict'
+
 global._ = require('underscore');
 global.utils = require('./utils');
 global.fs = require('fs');
@@ -37,7 +41,7 @@ var inputData = {
 
     // database variables
     host: 'localhost',
-    port: 27017,
+    port: '27017',
     dbName: 'demo',
     username: '',
     password: '',
@@ -74,27 +78,27 @@ async.series([
     //#region _____GENERATE_PROJECT_STRUCTURE_____
     (callback) => {
         var exitcode = 0;
-        console.log(announce('__________________________________________________________________'));
+        console.log(announce('\n__________________________________________________________________'));
         console.log(announce('____________________Generate project structure____________________'));
         console.log(announce('__________________________________________________________________'));
 
         root = inputData.output + '/' + inputData.name;
         if (!fs.existsSync(root)) {
-            console.log(error('❌ Folder [' + root + '] does not exist. Please try again !'));
+            console.log(error('⚠️  Folder [' + root + '] does not exist.'));
             fs.mkdirSync(root);
             console.log(success('✅ Created [' + root + ' ] folder'));
 
             // Generate project structure
             exitcode = core.generateProjectStructure(root, inputData)
         } else {
-            console.log(success('✅ Folder [' + root + '] exist --> Next !!!'));
+            console.log(success('✅ Folder [' + root + '] exist!!!'));
 
             // Check empty project folder
             if (fs.readdirSync(root).length > 0) {
                 console.log(error('❌ Folder [' + root + '] is not empty. Please try again !'));
                 exitcode = 1
             } else {
-                console.log(success('✅ Folder [' + root + '] is empty --> Next !!!'));
+                console.log(success('✅ Folder [' + root + '] is empty!!!'));
 
                 // Generate project structure
                 exitcode = core.generateProjectStructure(root, inputData)
@@ -106,6 +110,53 @@ async.series([
         } else {
             callback()
         }
+    },
+    //#endregion
+    //#region _____GENERATE_CORE_FILES_BASED_ON_DATABASE_____
+    (callback) => {
+        console.log(announce('\n__________________________________________________________________'));
+        console.log(announce('_______________Generate core files based on Database______________'));
+        console.log(announce('__________________________________________________________________'));
+
+        root = inputData.output + '/' + inputData.name;
+
+        core.generateKernelFiles(root, inputData, function (err, data) {
+            if (err) {
+                console.log(error('❌  ' + utils.ErrorHandle.getErrorMessage(err)));
+                callback(1);
+            } else {
+                console.log(success('\n✅ Generate Kernel files successfully !!!'));
+                callback();
+            }
+        });
+    },
+    //#endregion
+    //#region _____FINALIZE_GENERATE_PROCESS_____
+    (callback) => {
+        console.log(announce('\n__________________________________________________________________'));
+        console.log(announce('_____________________Finalize generate process____________________'));
+        console.log(announce('__________________________________________________________________'));
+
+        console.log(info('🗃  Your project structure in `' + root + '`'));
+        console.log('|___config');
+        console.log('|___core');
+        console.log('|   |___entity');
+        console.log('|   |___use_case');
+        console.log('|___data_provider');
+        console.log('|___logs');
+        console.log('|___routes');
+        console.log('|___utils');
+        console.log('|   .gitignore');
+        console.log('|   package.json');
+        console.log('|   README.md');
+        console.log('|   server.js');
+
+        console.log(info('\n🚀  Let\'s run the following command to begin: '));
+        console.log(success('   🎯 cd ' + root));
+        console.log(success('   🎯 npm install'));
+        console.log(success('   🎯 node server.js'));
+
+        callback();
     }
     //#endregion
 ], (exitcode) => {
