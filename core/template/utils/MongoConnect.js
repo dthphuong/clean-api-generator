@@ -26,14 +26,16 @@ exports.Connect = function (dbName) {
         // create connection string
         var connectionString = '';
         if (config.database.username == '' || config.database.password == '') {
-            connectionString = 'mongodb://' + config.database.host + "/" + dbName + config.database.optional;
+            connectionString = 'mongodb://' + config.database.host + ':' + config.database.port + "/" + dbName + config.database.optional;
         } else {
             connectionString = 'mongodb://' + config.database.username + ':' + config.database.password + '@' +
-                config.database.host + "/" + dbName + config.database.optional;
+                config.database.host + ':' + config.database.port + "/" + dbName + config.database.optional;
         }
 
         // connect to database
-        mongoose.connect(connectionString)
+        mongoose.connect(connectionString, {
+                useNewUrlParser: true
+            })
             .then(() => {
                 db = mongoose.connection;
                 console.log('MongoDb connection created to [' + db.name + ']');
