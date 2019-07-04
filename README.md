@@ -1,7 +1,16 @@
 # Clean API Generator
 #### Develop by FPO Co.,Ltd
 
-## 1. Checklist
+## 1. Description
+This is the tool to create clean API
+
+## 2. Installation
+```bash
+npm install
+node main.js
+```
+
+## 3. Checklist
 - [x] Build main UI
 - [x] Get project and database info
 - [x] Generate folder structure
@@ -16,3 +25,4 @@
 - [x] Generate Use_case files
 - [x] Generate Routes files
 - [x] Test phrase
+
