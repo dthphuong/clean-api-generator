@@ -92,7 +92,7 @@ exports.update = function (___COLLECTION_NAME___, cb) {
                         } else {
                             if (result.length > 0) {
                                 ___CHECKING_STEP___
-                                callback(null, data)
+                                callback(null, ___COLLECTION_NAME___)
                             } else {
                                 callback(3, null)
                             }
