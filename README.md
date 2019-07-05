@@ -25,4 +25,3 @@ node main.js
 - [x] Generate Use_case files
 - [x] Generate Routes files
 - [x] Test phrase
-
