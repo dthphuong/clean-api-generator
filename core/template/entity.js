@@ -13,4 +13,4 @@ var SchemaTypes = mongoose.Schema.Types;
 var __SCHEMA_NAME__ = new Schema(__FIELDS_LIST__, { versionKey: false });
 
 // Register the schema
-exports.__ENTITY_NAME__ = mongoose.model("__ENTITY_NAME__", __SCHEMA_NAME__, "__COLLECTION_NAME__");;
+exports.__ENTITY_NAME__ = mongoose.model("__ENTITY_NAME__", __SCHEMA_NAME__, "__COLLECTION_NAME__");
