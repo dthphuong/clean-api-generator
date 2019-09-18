@@ -60,7 +60,7 @@ exports.getById = function (___ID___, cb) {
             ], cb)
         })
         .catch(err => {
-            console.log('___COLLECTION_NAME____dataprovider_getAll: ' + err);
+            console.log('___COLLECTION_NAME____dataprovider_getById: ' + err);
             cb(err, null)
         })
 }

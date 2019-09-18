@@ -276,12 +276,12 @@ function formatMessageTimestamp(timestamp) {
     } else {
         if (diffDays >= 1 && diffDays <= 7) {
             var weekDayId = myDay.getDay();
-            return weekDayString[weekDayId] + ', ' + locateTime.hrs + ':' + locateTime.min + ' ' + locateTime.ii;;
+            return weekDayString[weekDayId] + ', ' + locateTime.hrs + ':' + locateTime.min + ' ' + locateTime.ii;
         } else {
             if (diffDays <= 365) {
-                return locateTime.dd + '/' + locateTime.mm + ', ' + locateTime.hrs + ':' + locateTime.min + ' ' + locateTime.ii;;
+                return locateTime.dd + '/' + locateTime.mm + ', ' + locateTime.hrs + ':' + locateTime.min + ' ' + locateTime.ii;
             } else {
-                return locateTime.dd + '/' + locateTime.mm + '/' + locateTime.yyyy + ', ' + locateTime.hrs + ':' + locateTime.min + ' ' + locateTime.ii;;
+                return locateTime.dd + '/' + locateTime.mm + '/' + locateTime.yyyy + ', ' + locateTime.hrs + ':' + locateTime.min + ' ' + locateTime.ii;
             }
         }
     }
