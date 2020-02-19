@@ -86,11 +86,11 @@ exports.update = function (___COLLECTION_NAME___, cb) {
                         $match: {
                             _id: mongoose.Types.ObjectId(___ID___)
                         }
-                    }], function (err, data) {
+                    }], function (err, result) {
                         if (err) {
                             callback(err, null)
                         } else {
-                            if (data.length > 0) {
+                            if (result.length > 0) {
                                 ___CHECKING_STEP___
                                 callback(null, ___COLLECTION_NAME___)
                             } else {
