@@ -32,6 +32,7 @@ exports.generatePackageJSON = (root, projectInfo) => {
         "license": projectInfo.license,
         "dependencies": {
             "async": "^3.0.1",
+            "bcrypt": "^3.0.6",
             "body-parser": "^1.19.0",
             "crypto-js": "^3.1.9-1",
             "express": "^4.17.1",
@@ -241,7 +242,7 @@ exports.generateDataProvider = (db, collectionName, callback) => {
                     let dvTemplate = fs.readFileSync(templatePath + 'data_provider.js', 'utf8');
                     let insertItem = {}, updateItem = {};
                     let checkingItem = '';
-                    let checkingTemplate = "___COLLECTION_NAME___.___FIELD_NAME___ = ((___COLLECTION_NAME___.___FIELD_NAME___ == '' || ___COLLECTION_NAME___.___FIELD_NAME___ == undefined) ? data[0].___FIELD_NAME___ : ___COLLECTION_NAME___.___FIELD_NAME___);\n"
+                    let checkingTemplate = "___COLLECTION_NAME___.___FIELD_NAME___ = ((___COLLECTION_NAME___.___FIELD_NAME___ == '' || ___COLLECTION_NAME___.___FIELD_NAME___ == undefined) ? result[0].___FIELD_NAME___ : ___COLLECTION_NAME___.___FIELD_NAME___);\n"
 
 
                     _.each(keys, (k) => {
