@@ -54,7 +54,7 @@ exports.create = function (req, res, next) {
         if (err) {
             return res.send({
                 exitcode: utils.ErrorHandle.getErrorCode(err),
-                data: [],
+                data: {},
                 message: utils.ErrorHandle.getErrorMessage(err) + ': ' + err
             })
         }
@@ -74,7 +74,7 @@ exports.update = function (req, res, next) {
         if (err) {
             return res.send({
                 exitcode: utils.ErrorHandle.getErrorCode(err),
-                data: [],
+                data: {},
                 message: utils.ErrorHandle.getErrorMessage(err) + ': ' + err
             })
         }
@@ -94,7 +94,7 @@ exports.delete = function (req, res, next) {
         if (err) {
             return res.send({
                 exitcode: utils.ErrorHandle.getErrorCode(err),
-                data: [],
+                data: {},
                 message: utils.ErrorHandle.getErrorMessage(err) + ': ' + err
             })
         }
