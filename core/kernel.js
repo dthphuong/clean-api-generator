@@ -38,6 +38,7 @@ exports.generatePackageJSON = (root, projectInfo) => {
             "express-rate-limit": "^5.1.3",
             "fcm-node": "^1.5.2",
             "formidable": "^1.2.2",
+            "html5-to-pdf": "^4.0.1",
             "jsonwebtoken": "^8.5.1",
             "mongoose": "^5.9.25",
             "nodemailer": "^6.4.10",
