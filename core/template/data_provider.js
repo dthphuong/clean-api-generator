@@ -14,24 +14,20 @@ var MongoConnect = require('../utils/MongoConnect'),
 exports.getAll = function (cb) {
     MongoConnect.Connect(config.database.name)
         .then(db => {
-            async.waterfall([
-                function (callback) {
-                    Entity.___ENTITY_NAME___.find({}, function (err, result) {
-                        if (err) {
-                            callback(err, null)
-                        } else {
-                            if (!_.isEmpty(result)) {
-                                callback(null, result)
-                            } else {
-                                callback(2, null)
-                            }
-                        }
-                    })
+            Entity.___ENTITY_NAME___.find({}, function (err, result) {
+                if (err) {
+                    cb(err, null)
+                } else {
+                    if (!_.isEmpty(result)) {
+                        cb(null, result)
+                    } else {
+                        cb(2, null)
+                    }
                 }
-            ], cb)
+            })
         })
         .catch(err => {
-            console.log('___COLLECTION_NAME____dataprovider_getAll: ' + err);
+            console.log('___COLLECTION_NAME____DataProvider_getAll: ' + err);
             cb(err, null)
         })
 }
@@ -39,28 +35,24 @@ exports.getAll = function (cb) {
 exports.getById = function (___ID___, cb) {
     MongoConnect.Connect(config.database.name)
         .then(db => {
-            async.waterfall([
-                function (callback) {
-                    Entity.___ENTITY_NAME___.aggregate([{
-                        $match: {
-                            _id: mongoose.Types.ObjectId(___ID___)
-                        }
-                    }], function (err, result) {
-                        if (err) {
-                            callback(err, null)
-                        } else {
-                            if (!_.isEmpty(result)) {
-                                callback(null, result[0])
-                            } else {
-                                callback(3, null)
-                            }
-                        }
-                    })
+            Entity.___ENTITY_NAME___.aggregate([{
+                $match: {
+                    _id: mongoose.Types.ObjectId(___ID___)
                 }
-            ], cb)
+            }], function (err, result) {
+                if (err) {
+                    cb(err, null)
+                } else {
+                    if (!_.isEmpty(result)) {
+                        cb(null, result[0])
+                    } else {
+                        cb(3, null)
+                    }
+                }
+            })
         })
         .catch(err => {
-            console.log('___COLLECTION_NAME____dataprovider_getById: ' + err);
+            console.log('___COLLECTION_NAME____DataProvider_getById: ' + err);
             cb(err, null)
         })
 }
@@ -71,7 +63,7 @@ exports.create = function (data, cb) {
             Entity.___ENTITY_NAME___.create(___INSERT_ITEM___, cb)
         })
         .catch(err => {
-            console.log('___COLLECTION_NAME____dataprovider_create: ' + err);
+            console.log('___COLLECTION_NAME____DataProvider_create: ' + err);
             cb(err, null)
         })
 }
@@ -103,20 +95,20 @@ exports.update = function (___COLLECTION_NAME___, cb) {
                     Entity.___ENTITY_NAME___.updateOne({
                         _id: ___COLLECTION_NAME___.___ID___
                     }, {
-                            $set: ___UPDATE_ITEM___
-                        }, function (err, result) {
-                            if (!err) {
-                                callback(null, result)
-                            } else {
-                                callback(err, null)
-                            }
-                        })
+                        $set: ___UPDATE_ITEM___
+                    }, function (err, result) {
+                        if (!err) {
+                            callback(null, result)
+                        } else {
+                            callback(err, null)
+                        }
+                    })
                 }
 
             ], cb)
         })
         .catch(err => {
-            console.log('___COLLECTION_NAME____dataprovider_update: ' + err);
+            console.log('___COLLECTION_NAME____DataProvider_update: ' + err);
             cb(err, null)
         })
 }
@@ -129,7 +121,7 @@ exports.delete = function (___ID___, cb) {
             }, cb)
         })
         .catch(err => {
-            console.log('___COLLECTION_NAME____dataprovider_delete: ' + err);
+            console.log('___COLLECTION_NAME____DataProvider_delete: ' + err);
             cb(err, null)
         })
 }
