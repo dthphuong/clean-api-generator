@@ -130,8 +130,8 @@ exports.generateKernelFiles = function (root, inputData, cb) {
                                     console.log(info('\n🤹🏼‍ Generating Routes . . . '));
 
                                     // Generate Routes index
-                                    let routeIndex = "var sysRoute = require('./system');\n";
-
+                                    let routeIndex = "var Middleware = require('../utils/Middleware');\nvar sysRoute = require('./system');\n";
+                                    
                                     _.each(collections, (colName) => {
                                         routeIndex += "var " + utils.String.toProperCase(colName) + " = require('./" + colName + "');\n";
                                     })
@@ -144,6 +144,7 @@ exports.generateKernelFiles = function (root, inputData, cb) {
                                     routeIndex += "\t//#region System route\n"
                                     routeIndex += "\tapp.post('/system/decode', sysRoute.decode);\n"
                                     routeIndex += "\tapp.post('/oauth', sysRoute.oauth);\n"
+                                    routeIndex += "\t// app.post('/APIwithToken', Middleware.authorized, sysRoute.oauth);\n"
 
                                     _.each(collections, (colName) => {
                                         routeIndex += "\n\t//#region " + utils.String.toProperCase(colName) + " route\n"
