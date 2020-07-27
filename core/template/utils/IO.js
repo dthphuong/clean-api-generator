@@ -14,26 +14,27 @@ const {
 } = require('child_process');
 
 //#region Get file name
-function getFilename(filename) {
-    return filename.replace(getExt(filename), '');
+exports.getFilename = (filename) => {
+    let ext = ('.' + filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2)).toLowerCase() == '.' ? '.png' : ('.' + filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2)).toLowerCase()
+    return filename.replace(ext, '');
 }
 //#endregion
 
 //#region Get ext of file name
-function getExt(filename) {
+exports.getExt = (filename) => {
     return ('.' + filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2)).toLowerCase() == '.' ? '.png' : ('.' + filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2)).toLowerCase();
 }
 //#endregion
 
 //#region Copy file from `srcPath` to `savPath` 
-function copyFile(srcPath, savPath) {
+exports.copyFile = (srcPath, savPath) => {
     var data = fs.readFileSync(srcPath);
     fs.writeFileSync(savPath, data);
 }
 //#endregion
 
 //#region Move file from `srcPath` to `savPath` 
-function moveFile(srcPath, savPath) {
+exports.moveFile = (srcPath, savPath) => {
     var data = fs.readFileSync(srcPath);
     fs.writeFileSync(savPath, data);
     fs.unlinkSync(srcPath);
@@ -41,7 +42,7 @@ function moveFile(srcPath, savPath) {
 //#endregion
 
 //#region Upper Title case
-function toProperCase(str) {
+exports.toProperCase = (str) => {
     return str.replace(
         /(^|[\s\xA0])[^\s\xA0]/g,
         function (txt) {
@@ -50,7 +51,7 @@ function toProperCase(str) {
     );
 }
 
-function toProperCase2(str) {
+exports.toProperCase2 = (str) => {
     return str.replace(
         /(^|[\s\xA0])[^\s\xA0]/g,
         function (txt) {
@@ -61,7 +62,7 @@ function toProperCase2(str) {
 //#endregion
 
 //#region Find the Longest Common Substring
-function longestCommonSubstring(str1, str2) {
+exports.longestCommonSubstring = (str1, str2) => {
     if (!str1 || !str2) {
         return {
             length: 0,
@@ -167,12 +168,3 @@ exports.execute = async (commands1, commands2) => {
         }
     });
 }
-
-
-exports.getFilename = getFilename;
-exports.getExt = getExt;
-exports.copyFile = copyFile;
-exports.moveFile = moveFile;
-exports.toProperCase = toProperCase;
-exports.toProperCase2 = toProperCase2;
-exports.longestCommonSubstring = longestCommonSubstring;
