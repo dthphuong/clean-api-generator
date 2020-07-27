@@ -8,13 +8,13 @@
 const config = require("../config");
 var jwt = require("jsonwebtoken");
 
-function encode(payload, exp) {
+exports.encode = (payload, exp) => {
   return jwt.sign(payload, config.server.secret, {
     expiresIn: parseInt(exp)
   });
 }
 
-function decode(token) {
+exports.decode = (token) => {
   var ret = {
     "exitcode": 0,
     "data": null,
@@ -45,6 +45,3 @@ function decode(token) {
 
   return ret;
 }
-
-exports.encode = encode;
-exports.decode = decode;
