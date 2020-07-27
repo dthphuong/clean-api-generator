@@ -32,8 +32,8 @@ node main.js
 - [] Upgrade API method (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`)
 - [] Upgrade Middle-ware to check token / non-token API
 - [] Upgrade `utils` libraries (update the latest functions in generator)
-- [] Install some new necessary packages
-- [] Uninstall some unnecessary packages
+- [x] Install some new necessary packages
+- [x] Uninstall some unnecessary packages
 - [] Fix some old issues
 
 
