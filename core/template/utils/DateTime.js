@@ -54,6 +54,26 @@ function toLocateDateTime(timestamp) {
 }
 //#endregion
 
+//#region Get ISODate of myDate
+function toISODate(myDate) {
+    var today = new Date(myDate);
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+
+    var yyyy = today.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+    return {
+        'start': yyyy + '-' + mm + '-' + dd + 'T00:00:00.000Z',
+        'end': yyyy + '-' + mm + '-' + dd + 'T23:59:59.000Z'
+    };
+}
+//#endregion
+
 //#region Convert Date to String (dd/mm/yyyy)
 function dateToString(myDate) {
     var today = new Date(myDate);
@@ -78,13 +98,13 @@ function dateTimeToString(myDate) {
     return day.dd + '/' + day.mm + '/' + day.yyyy + " vào lúc " + day.hrs + ":" + day.min + ":" + day.sec + ' ' + day.ii;
 }
 
-function dateTimeToStringWithoutAt(myDate) {
+exports.dateTimeToStringWithoutAt = (myDate) => {
     var day = toLocateDateTime(myDate);
     return day.dd + '/' + day.mm + '/' + day.yyyy + " " + day.hrs + ":" + day.min + ":" + day.sec;
 }
 
 //#endregion
-function weekDay(myDate) {
+exports.weekDay = (myDate) => {
     var enWeekDay = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     var WeekDay = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     var viWeekDay = ['Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy', 'Chủ nhật']
@@ -101,9 +121,51 @@ function weekDay(myDate) {
     return weekday;
 }
 
+exports.getWeekRange = (myDate) => {
+    var enWeekDay = [1, 2, 3, 4, 5, 6, 0];
+    // request a weekday along with a long date
+
+    var day = enWeekDay.indexOf((new Date(myDate)).getDay())
+    let firstDay = ""
+    let lastDate = ""
+    switch (day) {
+        case 0:
+            firstDay = new Date(myDate).setDate(new Date(myDate).getDate() - 0)
+            lastDate = new Date(myDate).setDate(new Date(myDate).getDate() + 6)
+            break;
+        case 1:
+            firstDay = new Date(myDate).setDate(new Date(myDate).getDate() - 1)
+            lastDate = new Date(myDate).setDate(new Date(myDate).getDate() + 5)
+            break;
+        case 2:
+            firstDay = new Date(myDate).setDate(new Date(myDate).getDate() - 2)
+            lastDate = new Date(myDate).setDate(new Date(myDate).getDate() + 4)
+            break;
+        case 3:
+            firstDay = new Date(myDate).setDate(new Date(myDate).getDate() - 3)
+            lastDate = new Date(myDate).setDate(new Date(myDate).getDate() + 3)
+            break;
+        case 4:
+            firstDay = new Date(myDate).setDate(new Date(myDate).getDate() - 4)
+            lastDate = new Date(myDate).setDate(new Date(myDate).getDate() + 2)
+            break;
+        case 5:
+            firstDay = new Date(myDate).setDate(new Date(myDate).getDate() - 5)
+            lastDate = new Date(myDate).setDate(new Date(myDate).getDate() + 1)
+            break;
+        case 6:
+            firstDay = new Date(myDate).setDate(new Date(myDate).getDate() - 6)
+            lastDate = new Date(myDate).setDate(new Date(myDate).getDate() + 0)
+            break;
+    }
+    return {
+        firstDay: toISODate(firstDay).start,
+        lastDate: toISODate(lastDate).end
+    };
+}
 
 //#region Convert Date/Time to ISODateString
-function toISODateString(myDate) {
+exports.toISODateString = (myDate) => {
     var today = new Date(myDate);
     var dd = today.getDate();
     var mm = today.getMonth() + 1; //January is 0!
@@ -123,7 +185,7 @@ function toISODateString(myDate) {
 //#endregion
 
 //#region Get ISODate of today - start
-function getStartDay() {
+exports.getStartDay = () => {
     var today = toLocateDateTime((new Date()));
 
     if (today.dd.length == 1) { today.dd = '0' + today.dd }
@@ -136,7 +198,7 @@ function getStartDay() {
 //#endregion
 
 //#region Get ISODate of today - end
-function getEndDay() {
+exports.getEndDay = () => {
     var today = toLocateDateTime((new Date()));
 
     if (today.dd.length == 1) { today.dd = '0' + today.dd }
@@ -149,7 +211,7 @@ function getEndDay() {
 //#endregion
 
 //#region Get ISODate of today
-function getNow() {
+exports.getNow = () => {
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth() + 1; //January is 0!
@@ -169,28 +231,8 @@ function getNow() {
 }
 //#endregion
 
-//#region Get ISODate of myDate
-function toISODate(myDate) {
-    var today = new Date(myDate);
-    var dd = today.getDate();
-    var mm = today.getMonth() + 1; //January is 0!
-
-    var yyyy = today.getFullYear();
-    if (dd < 10) {
-        dd = '0' + dd;
-    }
-    if (mm < 10) {
-        mm = '0' + mm;
-    }
-    return {
-        'start': yyyy + '-' + mm + '-' + dd + 'T00:00:00.000Z',
-        'end': yyyy + '-' + mm + '-' + dd + 'T23:59:59.000Z'
-    };
-}
-//#endregion
-
 //#region Get remain day 
-function getRemainDay(day) {
+exports.getRemainDay = (day) => {
     var today = new Date();
     var myDay = new Date(day);
     var timeDiff = Math.abs(myDay.getTime() - today.getTime());
@@ -209,16 +251,13 @@ function getRemainDay(day) {
 //#endregion
 
 //#region Get exam do time elapsed 
-function getExamTimeElapsed(startDate, completeDate) {
-    let x = new Date(completeDate),
-        y = new Date(startDate);
-
+exports.getExamTimeElapsed = (startDate, completeDate) => {
     return (completeDate.getTime() - startDate.getTime()) / 60000
 }
 //#endregion
 
 //#region Get post time elapsed 
-function getTimeElapsed(ptime) {
+exports.getTimeElapsed = (ptime) => {
     var secsOf = {
         'min': 60,
         'hour': 60 * 60,
@@ -262,7 +301,7 @@ function getTimeElapsed(ptime) {
 //#endregion
 
 //#region Format message timestamp
-function formatMessageTimestamp(timestamp) {
+exports.formatMessageTimestamp = (timestamp) => {
     var today = new Date();
     var myDay = new Date(timestamp);
     var timeDiff = Math.abs(myDay.getTime() - today.getTime());
@@ -289,7 +328,7 @@ function formatMessageTimestamp(timestamp) {
 //#endregion
 
 //#region Format message timestamp
-function formatEventTimestamp(timestamp) {
+exports.formatEventTimestamp = (timestamp) => {
     var today = new Date();
     var myDay = new Date(timestamp);
     var timeDiff = Math.abs(myDay.getTime() - today.getTime());
@@ -311,49 +350,6 @@ function formatEventTimestamp(timestamp) {
 }
 //#endregion
 
-//#region Get file name
-function getFilename(filename) {
-    return filename.replace(getExt(filename), '');
-}
-//#endregion
-
-//#region Get ext of file name
-function getExt(filename) {
-    return ('.' + filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2)).toLowerCase();
-}
-//#endregion
-
-//#region Copy file from `srcPath` to `savPath` 
-function copyFile(srcPath, savPath) {
-    var data = fs.readFileSync(srcPath);
-    fs.writeFileSync(savPath, data);
-}
-//#endregion
-
-//#region Move file from `srcPath` to `savPath` 
-function moveFile(srcPath, savPath) {
-    var data = fs.readFileSync(srcPath);
-    fs.writeFileSync(savPath, data);
-    fs.unlinkSync(srcPath);
-}
-//#endregion
-
-exports.getDateAsObject = function () {
-    return toLocateDateTime(new Date())
-}
-
-
-exports.getNow = getNow;
 exports.toISODate = toISODate;
-exports.getRemainDay = getRemainDay;
-exports.getTimeElapsed = getTimeElapsed;
 exports.dateTimeToString = dateTimeToString;
-exports.dateTimeToStringWithoutAt = dateTimeToStringWithoutAt;
 exports.dateToString = dateToString;
-exports.toISODateString = toISODateString
-exports.getEndDay = getEndDay;
-exports.getStartDay = getStartDay;
-exports.formatMessageTimestamp = formatMessageTimestamp;
-exports.formatEventTimestamp = formatEventTimestamp;
-exports.getExamTimeElapsed = getExamTimeElapsed;
-exports.weekDay = weekDay;

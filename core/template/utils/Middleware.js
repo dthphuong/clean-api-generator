@@ -1,8 +1,9 @@
 var jwt = require("../utils/JWT");
 
 exports.authorized = function (req, res, next) {
-    var token = req.body.token || req.headers["x-access-token"];
+    console.log(req.rateLimit); // logging count limit
 
+    var token = req.body.token || req.headers["x-access-token"];
     if (token) {
         var decoded = jwt.decode(token);
 
