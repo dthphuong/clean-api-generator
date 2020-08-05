@@ -31,7 +31,7 @@ node main.js
 - [] Add required and basic constraint into `Entity`
 - [] Upgrade API method (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`)
 - [x] Upgrade Middle-ware to check token / non-token API
-- [] Upgrade `utils` libraries (update the latest functions in generator)
+- [x] Upgrade `utils` libraries (update the latest functions in generator)
 - [x] Install some new necessary packages
 - [x] Uninstall some unnecessary packages
 - [x] Fix some old issues
