@@ -149,11 +149,11 @@ exports.generateKernelFiles = function (root, inputData, cb) {
                                     _.each(collections, (colName) => {
                                         routeIndex += "\n\t//#region " + utils.String.toProperCase(colName) + " route\n"
 
-                                        routeIndex += "\tapp.get('/" + colName + "s', " + utils.String.toProperCase(colName) + ".getAll);\n";
-                                        routeIndex += "\tapp.get('/" + colName + "', " + utils.String.toProperCase(colName) + ".getById);\n";
-                                        routeIndex += "\tapp.post('/" + colName + "', " + utils.String.toProperCase(colName) + ".create);\n";
-                                        routeIndex += "\tapp.put('/" + colName + "', " + utils.String.toProperCase(colName) + ".update);\n";
-                                        routeIndex += "\tapp.delete('/" + colName + "', " + utils.String.toProperCase(colName) + ".delete);\n";
+                                        routeIndex += "\tapp.get('/" + colName + "', " + utils.String.toProperCase(colName) + ".getAll);\n";
+                                        routeIndex += "\tapp.get('/" + colName.slice(0, -1) + "', " + utils.String.toProperCase(colName) + ".getById);\n";
+                                        routeIndex += "\tapp.post('/" + colName.slice(0, -1) + "', " + utils.String.toProperCase(colName) + ".create);\n";
+                                        routeIndex += "\tapp.put('/" + colName.slice(0, -1) + "', " + utils.String.toProperCase(colName) + ".update);\n";
+                                        routeIndex += "\tapp.delete('/" + colName.slice(0, -1) + "', " + utils.String.toProperCase(colName) + ".delete);\n";
                                     })
                                     routeIndex += "}"
 
