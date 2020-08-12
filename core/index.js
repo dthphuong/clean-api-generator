@@ -131,7 +131,7 @@ exports.generateKernelFiles = function (root, inputData, cb) {
 
                                     // Generate Routes index
                                     let routeIndex = "var Middleware = require('../utils/Middleware');\nvar sysRoute = require('./system');\n";
-                                    
+
                                     _.each(collections, (colName) => {
                                         routeIndex += "var " + utils.String.toProperCase(colName) + " = require('./" + colName + "');\n";
                                     })
@@ -149,11 +149,11 @@ exports.generateKernelFiles = function (root, inputData, cb) {
                                     _.each(collections, (colName) => {
                                         routeIndex += "\n\t//#region " + utils.String.toProperCase(colName) + " route\n"
 
-                                        routeIndex += "\tapp.post('/" + colName + "/getAll', " + utils.String.toProperCase(colName) + ".getAll);\n";
-                                        routeIndex += "\tapp.post('/" + colName + "/getById', " + utils.String.toProperCase(colName) + ".getById);\n";
-                                        routeIndex += "\tapp.post('/" + colName + "/create', " + utils.String.toProperCase(colName) + ".create);\n";
-                                        routeIndex += "\tapp.post('/" + colName + "/update', " + utils.String.toProperCase(colName) + ".update);\n";
-                                        routeIndex += "\tapp.post('/" + colName + "/delete', " + utils.String.toProperCase(colName) + ".delete);\n";
+                                        routeIndex += "\tapp.get('/" + colName + "s', " + utils.String.toProperCase(colName) + ".getAll);\n";
+                                        routeIndex += "\tapp.get('/" + colName + "', " + utils.String.toProperCase(colName) + ".getById);\n";
+                                        routeIndex += "\tapp.post('/" + colName + "', " + utils.String.toProperCase(colName) + ".create);\n";
+                                        routeIndex += "\tapp.put('/" + colName + "', " + utils.String.toProperCase(colName) + ".update);\n";
+                                        routeIndex += "\tapp.delete('/" + colName + "', " + utils.String.toProperCase(colName) + ".delete);\n";
                                     })
                                     routeIndex += "}"
 

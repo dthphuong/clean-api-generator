@@ -202,7 +202,7 @@ exports.generateUseCase = (collectionName, callback) => {
 
         usecaseTemplate = usecaseTemplate
             .replace(/___COLLECTION_NAME___/g, collectionName)
-            .replace(/___ID___/g, collectionName + 'Id')
+            .replace(/___ID___/g, '_id')
             .replace(/___DATA___/g, collectionName + 'Data')
 
         fs.writeFileSync(this.root + '/core/use_case/' + collectionName + '.js', usecaseTemplate, 'utf8');
@@ -252,7 +252,7 @@ exports.generateDataProvider = (db, collectionName, callback) => {
                     dvTemplate = dvTemplate
                         .replace(/___COLLECTION_NAME___/g, collectionName)
                         .replace(/___ENTITY_NAME___/g, utils.String.toProperCase(collectionName) + 'Entity')
-                        .replace(/___ID___/g, collectionName + 'Id')
+                        .replace(/___ID___/g, '_id')
                         .replace(/___INSERT_ITEM___/g, JSON.stringify(insertItem, null, 4))
                         .replace(/___UPDATE_ITEM___/g, JSON.stringify(updateItem, null, 4))
                         .replace(/===,\"/g, '')
@@ -275,7 +275,7 @@ exports.generateRoute = (collectionName, callback) => {
 
         routeTemplate = routeTemplate
             .replace(/___COLLECTION_NAME___/g, collectionName)
-            .replace(/___ID___/g, collectionName + 'Id')
+            .replace(/___ID___/g, '_id')
 
         fs.writeFileSync(this.root + '/routes/' + collectionName + '.js', routeTemplate, 'utf8');
         callback(null);

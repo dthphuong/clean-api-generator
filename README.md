@@ -29,7 +29,7 @@ node main.js
 
 #### 3.2. Stage 02
 - [] Add required and basic constraint into `Entity`
-- [] Upgrade API method (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`)
+- [x] Upgrade API method (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`)
 - [x] Upgrade Middle-ware to check token / non-token API
 - [x] Upgrade `utils` libraries (update the latest functions in generator)
 - [x] Install some new necessary packages
