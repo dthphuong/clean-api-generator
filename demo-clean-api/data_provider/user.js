@@ -14,7 +14,7 @@ var MongoConnect = require('../utils/MongoConnect'),
 exports.getAll = function (cb) {
     MongoConnect.Connect(config.database.name)
         .then(db => {
-            Entity.___ENTITY_NAME___.find({}, function (err, result) {
+            Entity.UserEntity.find({}, function (err, result) {
                 if (err) {
                     cb(err, null)
                 } else {
@@ -27,17 +27,17 @@ exports.getAll = function (cb) {
             })
         })
         .catch(err => {
-            console.log('___COLLECTION_NAME____DataProvider_getAll: ' + err);
+            console.log('user_DataProvider_getAll: ' + err);
             cb(err, null)
         })
 }
 
-exports.getById = function (___ID___, cb) {
+exports.getById = function (_id, cb) {
     MongoConnect.Connect(config.database.name)
         .then(db => {
-            Entity.___ENTITY_NAME___.aggregate([{
+            Entity.UserEntity.aggregate([{
                 $match: {
-                    _id: mongoose.Types.ObjectId(___ID___)
+                    _id: mongoose.Types.ObjectId(_id)
                 }
             }], function (err, result) {
                 if (err) {
@@ -52,7 +52,7 @@ exports.getById = function (___ID___, cb) {
             })
         })
         .catch(err => {
-            console.log('___COLLECTION_NAME____DataProvider_getById: ' + err);
+            console.log('user_DataProvider_getById: ' + err);
             cb(err, null)
         })
 }
@@ -60,42 +60,59 @@ exports.getById = function (___ID___, cb) {
 exports.create = function (data, cb) {
     MongoConnect.Connect(config.database.name)
         .then(db => {
-            Entity.___ENTITY_NAME___.create(___INSERT_ITEM___, cb)
+            Entity.UserEntity.create({
+    "name": data.name,
+    "age": data.age,
+    "birthday": data.birthday,
+    "gender": data.gender,
+    "json": data.json
+}, cb)
         })
         .catch(err => {
-            console.log('___COLLECTION_NAME____DataProvider_create: ' + err);
+            console.log('user_DataProvider_create: ' + err);
             cb(err, null)
         })
 }
 
-exports.update = function (___COLLECTION_NAME___, cb) {
+exports.update = function (user, cb) {
     MongoConnect.Connect(config.database.name)
         .then(db => {
             async.waterfall([
                 function (callback) {
-                    let ___ID___ = ___COLLECTION_NAME___.___ID___;
-                    Entity.___ENTITY_NAME___.aggregate([{
+                    let _id = user._id;
+                    Entity.UserEntity.aggregate([{
                         $match: {
-                            _id: mongoose.Types.ObjectId(___ID___)
+                            _id: mongoose.Types.ObjectId(_id)
                         }
                     }], function (err, result) {
                         if (err) {
                             callback(err, null)
                         } else {
                             if (result.length > 0) {
-                                ___CHECKING_STEP___
-                                callback(null, ___COLLECTION_NAME___)
+                                user.name = ((user.name == '' || user.name == undefined) ? result[0].name : user.name);
+user.age = ((user.age == '' || user.age == undefined) ? result[0].age : user.age);
+user.birthday = ((user.birthday == '' || user.birthday == undefined) ? result[0].birthday : user.birthday);
+user.gender = ((user.gender == '' || user.gender == undefined) ? result[0].gender : user.gender);
+user.json = ((user.json == '' || user.json == undefined) ? result[0].json : user.json);
+
+                                callback(null, user)
                             } else {
                                 callback(3, null)
                             }
                         }
                     })
                 },
-                function (___COLLECTION_NAME___, callback) {
-                    Entity.___ENTITY_NAME___.updateOne({
-                        _id: ___COLLECTION_NAME___.___ID___
+                function (user, callback) {
+                    Entity.UserEntity.updateOne({
+                        _id: user._id
                     }, {
-                        $set: ___UPDATE_ITEM___
+                        $set: {
+    "name": user.name,
+    "age": user.age,
+    "birthday": user.birthday,
+    "gender": user.gender,
+    "json": user.json
+}
                     }, function (err, result) {
                         if (!err) {
                             callback(null, result)
@@ -108,20 +125,20 @@ exports.update = function (___COLLECTION_NAME___, cb) {
             ], cb)
         })
         .catch(err => {
-            console.log('___COLLECTION_NAME____DataProvider_update: ' + err);
+            console.log('user_DataProvider_update: ' + err);
             cb(err, null)
         })
 }
 
-exports.delete = function (___ID___, cb) {
+exports.delete = function (_id, cb) {
     MongoConnect.Connect(config.database.name)
         .then(db => {
-            Entity.___ENTITY_NAME___.deleteOne({
-                _id: mongoose.Types.ObjectId(___ID___)
+            Entity.UserEntity.deleteOne({
+                _id: mongoose.Types.ObjectId(_id)
             }, cb)
         })
         .catch(err => {
-            console.log('___COLLECTION_NAME____DataProvider_delete: ' + err);
+            console.log('user_DataProvider_delete: ' + err);
             cb(err, null)
         })
 }

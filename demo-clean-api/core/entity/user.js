@@ -10,7 +10,13 @@ const Double = require('@mongoosejs/double');
 var SchemaTypes = mongoose.Schema.Types;
 
 // Create a Mongoose Schema
-var __SCHEMA_NAME__ = new Schema(__FIELDS_LIST__, { versionKey: false });
+var UserSchema = new Schema({
+    "name": String,
+    "age": Number,
+    "birthday": Date,
+    "gender": Boolean,
+    "json": JSON
+}, { versionKey: false });
 
 // Register the schema
-exports.__ENTITY_NAME__ = mongoose.model("__ENTITY_NAME__", __SCHEMA_NAME__, "__COLLECTION_NAME__");
+exports.UserEntity = mongoose.model("UserEntity", UserSchema, "user");

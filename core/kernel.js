@@ -1,6 +1,6 @@
 /**
- * Created by FPO Co.,Ltd - June 2019
- * Website: http://fpo.vn
+ * Created by FPO Co.,Ltd - Nov 2020
+ * Website: https://fpo.vn
  * Email: contact@fpo.vn
  */
 'use strict'
@@ -31,8 +31,10 @@ exports.generatePackageJSON = (root, projectInfo) => {
         "author": projectInfo.author,
         "license": projectInfo.license,
         "dependencies": {
+            "@mongoosejs/double": "^0.2.0",
             "async": "^3.2.0",
             "bcrypt": "^5.0.0",
+            "cors": "^2.8.5",
             "crypto-js": "^4.0.0",
             "express": "^4.17.1",
             "express-rate-limit": "^5.1.3",
@@ -41,7 +43,7 @@ exports.generatePackageJSON = (root, projectInfo) => {
             "html5-to-pdf": "^4.0.1",
             "jsonwebtoken": "^8.5.1",
             "mongoose": "^5.9.25",
-            "mongoose-double": "0.0.1",
+            "morgan": "^1.10.0",
             "nodemailer": "^6.4.10",
             "randomstring": "^1.1.5",
             "request": "^2.88.2",

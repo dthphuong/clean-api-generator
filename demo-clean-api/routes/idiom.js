@@ -3,7 +3,7 @@
  * Website: https://fpo.vn
  * Email: contact@fpo.vn
  */
-var UseCase = require('../core/use_case/___COLLECTION_NAME___'),
+var UseCase = require('../core/use_case/idiom'),
     utils = require('../utils'),
     config = require('../config'),
     jwt = require('../utils/JWT'),
@@ -31,8 +31,8 @@ exports.getAll = function (req, res, next) {
 
 
 exports.getById = function (req, res, next) {
-    var ___ID___ = req.body.___ID___
-    UseCase.getById(___ID___, function (err, result) {
+    var _id = req.body._id
+    UseCase.getById(_id, function (err, result) {
         if (err) {
             return res.send({
                 exitcode: utils.ErrorHandle.getErrorCode(err),
@@ -61,7 +61,7 @@ exports.create = function (req, res, next) {
         return res.send({
             exitcode: 1,
             data: {
-                ___ID___: result._id,
+                _id: result._id,
             },
             message: 'Create item successful',
         });
@@ -69,8 +69,8 @@ exports.create = function (req, res, next) {
 }
 
 exports.update = function (req, res, next) {
-    var ___COLLECTION_NAME___ = req.body;
-    UseCase.update(___COLLECTION_NAME___, function (err, result) {
+    var idiom = req.body;
+    UseCase.update(idiom, function (err, result) {
         if (err) {
             return res.send({
                 exitcode: utils.ErrorHandle.getErrorCode(err),
@@ -89,8 +89,8 @@ exports.update = function (req, res, next) {
 }
 
 exports.delete = function (req, res, next) {
-    var ___ID___ = req.body.___ID___;
-    UseCase.delete(___ID___, function (err, result) {
+    var _id = req.body._id;
+    UseCase.delete(_id, function (err, result) {
         if (err) {
             return res.send({
                 exitcode: utils.ErrorHandle.getErrorCode(err),

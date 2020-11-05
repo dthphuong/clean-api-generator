@@ -1,6 +1,6 @@
 /**
- * Created by FPO Co.,Ltd - June 2019
- * Website: http://fpo.vn
+ * Created by FPO Co.,Ltd - Nov 2020
+ * Website: https://fpo.vn
  * Email: contact@fpo.vn
  */
 'use strict'
