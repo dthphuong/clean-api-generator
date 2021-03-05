@@ -31,6 +31,8 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+app.use(cors());
+
 app.use(Middleware.parametersParser); // parse parameters in Query before processing
 
 var accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs', 'access.log'), { flags: 'a' })
