@@ -32,7 +32,7 @@ exports.authorized = function (req, res, next) {
 // Parse some parameters for QueryBuilder
 exports.parametersParser = function (req, res, next) {
     var data = { ...req.query, ...req.body }
-    if (_.isUndefined(data.cols)) {
+    if (_.isUndefined(data.cols) || data.cols == '') {
         data.cols = config.CONST.DEFAULT_SEARCH_COLUMN;
         data.q = '';
     } else {
