@@ -45,7 +45,8 @@ var inputData = {
     dbName: 'demo',
     username: '',
     password: '',
-    optional: ''
+    optional: '',
+    collation: 'vi'
 };
 var root = '';
 
