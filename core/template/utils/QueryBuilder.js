@@ -12,6 +12,7 @@ const _ = require('underscore');
 class QueryBuilder {
     constructor(query) {
         this.query = query;
+        this.finalQuery = []
     }
 
     getQuery() {
@@ -21,7 +22,6 @@ class QueryBuilder {
         //     ['$sort', 'col1', 'ASC']
         // ]
 
-        var finalQuery = [];
         var matchQuery = [],
             sortFields = [], sortOrders = [];
 
@@ -104,19 +104,24 @@ class QueryBuilder {
 
         // Process final query again
         if (!_.isEmpty(matchQuery)) {
-            finalQuery.push({
+            this.finalQuery.push({
                 $match: { $and: matchQuery }
             })
         }
 
         if (!_.isEmpty(sortFields)) {
-            finalQuery.push({
+            this.finalQuery.push({
                 $sort: _.object(sortFields, sortOrders)
             })
         }
 
-        return finalQuery;
+        return this.finalQuery;
+    }
+
+    debug() {
+        this.getQuery();
+        console.log(`[DEBUG]: ${JSON.stringify(this.finalQuery, null, 4)}`);
     }
 }
 
-exports.QueryBuilder = QueryBuilder;
+module.exports = QueryBuilder;

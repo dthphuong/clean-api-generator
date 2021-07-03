@@ -6,7 +6,8 @@
 var mongoose = require('mongoose')
 var async = require('async'),
     _ = require('underscore'),
-    utils = require('../utils');
+    utils = require('../utils'),
+    QueryBuilder = require('../utils').QueryBuilder;
 
 var MongoConnect = require('../utils/MongoConnect'),
     Entity = require('../core/entity');
