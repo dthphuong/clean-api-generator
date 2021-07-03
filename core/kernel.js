@@ -42,7 +42,7 @@ exports.generatePackageJSON = (root, projectInfo) => {
             "formidable": "^1.2.2",
             "html5-to-pdf": "^4.0.1",
             "jsonwebtoken": "^8.5.1",
-            "mongoose": "^5.9.25",
+            "mongoose": "^5.13.1",
             "morgan": "^1.10.0",
             "nodemailer": "^6.4.10",
             "randomstring": "^1.1.5",
