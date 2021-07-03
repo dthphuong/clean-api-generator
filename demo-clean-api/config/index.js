@@ -30,12 +30,12 @@ switch (configType) {
             maxDuration: 10000 // ms
         }
         exports.database = {
-            host: 'HOST',
-            port: PORT,
-            name: 'DBNAME',
-            username: 'USERNAME',
-            password: 'PASSWORD',
-            optional: 'OPTIONAL'
+            host: 'localhost',
+            port: 27017,
+            name: 'demo',
+            username: '',
+            password: '',
+            optional: ''
         }
         exports.CONST = {
             DEFAULT_SEARCH_COLUMN: '_id',
@@ -74,12 +74,12 @@ switch (configType) {
             maxDuration: 10000 // ms
         }
         exports.database = {
-            host: 'HOST',
-            port: PORT,
-            name: 'DBNAME',
-            username: 'USERNAME',
-            password: 'PASSWORD',
-            optional: 'OPTIONAL'
+            host: 'localhost',
+            port: 27017,
+            name: 'demo',
+            username: '',
+            password: '',
+            optional: ''
         }
         exports.CONST = {
             DEFAULT_SEARCH_COLUMN: '_id',

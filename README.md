@@ -11,6 +11,7 @@ node main.js
 ```
 
 ## 3. Checklist
+#### 3.1. Stage 01
 - [x] Build main UI
 - [x] Get project and database info
 - [x] Generate folder structure
@@ -25,3 +26,14 @@ node main.js
 - [x] Generate Use_case files
 - [x] Generate Routes files
 - [x] Test phrase
+
+#### 3.2. Stage 02
+- [] Add required and basic constraint into `Entity`
+- [x] Upgrade API method (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`)
+- [x] Upgrade Middle-ware to check token / non-token API
+- [x] Upgrade `utils` libraries (update the latest functions in generator)
+- [x] Install some new necessary packages
+- [x] Uninstall some unnecessary packages
+- [x] Fix some old issues
+
+

@@ -6,8 +6,7 @@
 var mongoose = require('mongoose')
 var async = require('async'),
     _ = require('underscore'),
-    utils = require('../utils'),
-    QueryBuilder = require('../utils').QueryBuilder;
+    utils = require('../utils');
 
 var MongoConnect = require('../utils/MongoConnect'),
     Entity = require('../core/entity');
@@ -15,7 +14,7 @@ var MongoConnect = require('../utils/MongoConnect'),
 exports.getAll = function (cb) {
     MongoConnect.Connect(config.database.name)
         .then(db => {
-            Entity.___ENTITY_NAME___.find({}, function (err, result) {
+            Entity.IdiomEntity.find({}, function (err, result) {
                 if (err) {
                     cb(err, null)
                 } else {
@@ -28,17 +27,17 @@ exports.getAll = function (cb) {
             })
         })
         .catch(err => {
-            console.log('___COLLECTION_NAME____DataProvider_getAll: ' + err);
+            console.log('idiom_DataProvider_getAll: ' + err);
             cb(err, null)
         })
 }
 
-exports.getById = function (___ID___, cb) {
+exports.getById = function (_id, cb) {
     MongoConnect.Connect(config.database.name)
         .then(db => {
-            Entity.___ENTITY_NAME___.aggregate([{
+            Entity.IdiomEntity.aggregate([{
                 $match: {
-                    _id: mongoose.Types.ObjectId(___ID___)
+                    _id: mongoose.Types.ObjectId(_id)
                 }
             }], function (err, result) {
                 if (err) {
@@ -53,7 +52,7 @@ exports.getById = function (___ID___, cb) {
             })
         })
         .catch(err => {
-            console.log('___COLLECTION_NAME____DataProvider_getById: ' + err);
+            console.log('idiom_DataProvider_getById: ' + err);
             cb(err, null)
         })
 }
@@ -61,42 +60,50 @@ exports.getById = function (___ID___, cb) {
 exports.create = function (data, cb) {
     MongoConnect.Connect(config.database.name)
         .then(db => {
-            Entity.___ENTITY_NAME___.create(___INSERT_ITEM___, cb)
+            Entity.IdiomEntity.create({
+    "author": data.author,
+    "sentence": data.sentence
+}, cb)
         })
         .catch(err => {
-            console.log('___COLLECTION_NAME____DataProvider_create: ' + err);
+            console.log('idiom_DataProvider_create: ' + err);
             cb(err, null)
         })
 }
 
-exports.update = function (___COLLECTION_NAME___, cb) {
+exports.update = function (idiom, cb) {
     MongoConnect.Connect(config.database.name)
         .then(db => {
             async.waterfall([
                 function (callback) {
-                    let ___ID___ = ___COLLECTION_NAME___.___ID___;
-                    Entity.___ENTITY_NAME___.aggregate([{
+                    let _id = idiom._id;
+                    Entity.IdiomEntity.aggregate([{
                         $match: {
-                            _id: mongoose.Types.ObjectId(___ID___)
+                            _id: mongoose.Types.ObjectId(_id)
                         }
                     }], function (err, result) {
                         if (err) {
                             callback(err, null)
                         } else {
                             if (result.length > 0) {
-                                ___CHECKING_STEP___
-                                callback(null, ___COLLECTION_NAME___)
+                                idiom.author = ((idiom.author == '' || idiom.author == undefined) ? result[0].author : idiom.author);
+idiom.sentence = ((idiom.sentence == '' || idiom.sentence == undefined) ? result[0].sentence : idiom.sentence);
+
+                                callback(null, idiom)
                             } else {
                                 callback(3, null)
                             }
                         }
                     })
                 },
-                function (___COLLECTION_NAME___, callback) {
-                    Entity.___ENTITY_NAME___.updateOne({
-                        _id: ___COLLECTION_NAME___.___ID___
+                function (idiom, callback) {
+                    Entity.IdiomEntity.updateOne({
+                        _id: idiom._id
                     }, {
-                        $set: ___UPDATE_ITEM___
+                        $set: {
+    "author": idiom.author,
+    "sentence": idiom.sentence
+}
                     }, function (err, result) {
                         if (!err) {
                             callback(null, result)
@@ -109,20 +116,20 @@ exports.update = function (___COLLECTION_NAME___, cb) {
             ], cb)
         })
         .catch(err => {
-            console.log('___COLLECTION_NAME____DataProvider_update: ' + err);
+            console.log('idiom_DataProvider_update: ' + err);
             cb(err, null)
         })
 }
 
-exports.delete = function (___ID___, cb) {
+exports.delete = function (_id, cb) {
     MongoConnect.Connect(config.database.name)
         .then(db => {
-            Entity.___ENTITY_NAME___.deleteOne({
-                _id: mongoose.Types.ObjectId(___ID___)
+            Entity.IdiomEntity.deleteOne({
+                _id: mongoose.Types.ObjectId(_id)
             }, cb)
         })
         .catch(err => {
-            console.log('___COLLECTION_NAME____DataProvider_delete: ' + err);
+            console.log('idiom_DataProvider_delete: ' + err);
             cb(err, null)
         })
 }

@@ -1,6 +1,6 @@
 /**
- * Created by FPO Co.,Ltd - June 2019
- * Website: http://fpo.vn
+ * Created by FPO Co.,Ltd - Nov 2020
+ * Website: https://fpo.vn
  * Email: contact@fpo.vn
  */
 'use strict'
@@ -31,28 +31,24 @@ exports.generatePackageJSON = (root, projectInfo) => {
         "author": projectInfo.author,
         "license": projectInfo.license,
         "dependencies": {
-            "async": "^3.0.1",
-            "bcrypt": "^3.0.6",
-            "body-parser": "^1.19.0",
-            "crypto-js": "^3.1.9-1",
+            "@mongoosejs/double": "^0.2.0",
+            "async": "^3.2.0",
+            "bcrypt": "^5.0.0",
+            "cors": "^2.8.5",
+            "crypto-js": "^4.0.0",
             "express": "^4.17.1",
-            "express-mailer": "^0.3.1",
-            "express-rate-limit": "^3.4.0",
-            "fcm-node": "^1.3.0",
-            "fluent-ffmpeg": "^2.1.2",
-            "formidable": "^1.1.1",
-            "fs-extra": "^8.0.1",
-            "html5-to-pdf": "^3.1.3",
-            "jsonwebtoken": "^8.1.1",
-            "mongoose": "^5.0.3",
-            "mongoose-double": "0.0.1",
-            "nodemailer": "^4.6.8",
+            "express-rate-limit": "^5.1.3",
+            "fcm-node": "^1.5.2",
+            "formidable": "^1.2.2",
+            "html5-to-pdf": "^4.0.1",
+            "jsonwebtoken": "^8.5.1",
+            "mongoose": "^5.13.1",
+            "morgan": "^1.10.0",
+            "nodemailer": "^6.4.10",
             "randomstring": "^1.1.5",
-            "request": "^2.83.0",
-            "sharp": "^0.22.1",
-            "slice": "^1.0.0",
-            "socket.io": "^2.2.0",
-            "underscore": "^1.9.1"
+            "request": "^2.88.2",
+            "socket.io": "^2.3.0",
+            "underscore": "^1.10.2"
         }
     }
 
@@ -71,6 +67,17 @@ exports.generatePackageJSON = (root, projectInfo) => {
     try {
         fs.writeFileSync(root + '/package.json', JSON.stringify(data, null, 4))
         console.log(success('✅ Generate `package.json` file successfully --> Next !!!'));
+    } catch (err) {
+        throw err;
+    }
+}
+
+exports.generateCodeSnippets = (root) => {
+    try {
+        fs.mkdirSync(root + '/.vscode');
+        let snippetsData = fs.readFileSync(__dirname + '/template/clean-code-snippets.code-snippets');
+        fs.writeFileSync(root + '/.vscode/clean-code-snippets.code-snippets', snippetsData);
+        console.log(success('✅ Generate `clean-code-snippets.code-snippets` file successfully --> Next !!!'));
     } catch (err) {
         throw err;
     }
@@ -209,7 +216,7 @@ exports.generateUseCase = (collectionName, callback) => {
 
         usecaseTemplate = usecaseTemplate
             .replace(/___COLLECTION_NAME___/g, collectionName)
-            .replace(/___ID___/g, collectionName + 'Id')
+            .replace(/___ID___/g, '_id')
             .replace(/___DATA___/g, collectionName + 'Data')
 
         fs.writeFileSync(this.root + '/core/use_case/' + collectionName + '.js', usecaseTemplate, 'utf8');
@@ -259,7 +266,7 @@ exports.generateDataProvider = (db, collectionName, callback) => {
                     dvTemplate = dvTemplate
                         .replace(/___COLLECTION_NAME___/g, collectionName)
                         .replace(/___ENTITY_NAME___/g, utils.String.toProperCase(collectionName) + 'Entity')
-                        .replace(/___ID___/g, collectionName + 'Id')
+                        .replace(/___ID___/g, '_id')
                         .replace(/___INSERT_ITEM___/g, JSON.stringify(insertItem, null, 4))
                         .replace(/___UPDATE_ITEM___/g, JSON.stringify(updateItem, null, 4))
                         .replace(/===,\"/g, '')
@@ -282,7 +289,7 @@ exports.generateRoute = (collectionName, callback) => {
 
         routeTemplate = routeTemplate
             .replace(/___COLLECTION_NAME___/g, collectionName)
-            .replace(/___ID___/g, collectionName + 'Id')
+            .replace(/___ID___/g, '_id')
 
         fs.writeFileSync(this.root + '/routes/' + collectionName + '.js', routeTemplate, 'utf8');
         callback(null);

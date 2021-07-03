@@ -8,6 +8,7 @@
 global.config = require("./config");
 global._ = require("underscore");
 var express = require("express"),
+  bodyParser = require("body-parser"),
   limiter = require('./utils/Limiter'),
   fs = require('fs'),
   path = require('path'),
@@ -22,15 +23,13 @@ app.use(limiter.generalLimiter); // apply to all api
 app.use('/oauth', limiter.mediumLimiter); // apply to oauth, decode,. . . api
 app.use('/system/decode', limiter.mediumLimiter); // apply to oauth, decode,. . . api
 
-app.use(express.json({
+app.use(bodyParser.json({
   limit: "500mb"
 }));
-app.use(express.urlencoded({
+app.use(bodyParser.urlencoded({
   limit: "500mb",
   extended: true
 }));
-
-app.use(cors());
 
 app.use(Middleware.parametersParser); // parse parameters in Query before processing
 

@@ -17,26 +17,30 @@ function isJSON(json) {
 }
 
 exports.get = function (value) {
-    switch (typeof value) {
-        case 'number':
-            return 'Number'
-        case 'string':
-            return 'String'
-        case 'object':
-            if (_.isDate(value)) {
-                return 'Date'
-            }
-            if (value.toString().length == 24) {
-                return 'ObjectId'
-            }
-            if (isJSON(value)) {
-                return 'JSON'
-            }
+    if (!_.isUndefined(value) && !_.isNull(value)) {
+        switch (typeof value) {
+            case 'number':
+                return 'Number'
+            case 'string':
+                return 'String'
+            case 'object':
+                if (_.isDate(value)) {
+                    return 'Date'
+                }
+                if (value.toString().length == 24) {
+                    return 'ObjectId'
+                }
+                if (isJSON(value)) {
+                    return 'JSON'
+                }
 
-            return 'object'
-        case 'boolean':
-            return 'Boolean'
-        default:
-            return typeof value
+                return 'object'
+            case 'boolean':
+                return 'Boolean'
+            default:
+                return typeof value
+        }
+    } else {
+        return undefined
     }
 }

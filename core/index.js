@@ -1,6 +1,6 @@
 /**
- * Created by FPO Co.,Ltd - June 2019
- * Website: http://fpo.vn
+ * Created by FPO Co.,Ltd - Nov 2020
+ * Website: https://fpo.vn
  * Email: contact@fpo.vn
  */
 'use strict'
@@ -27,6 +27,9 @@ exports.generateProjectStructure = function (root, inputData) {
         // Generate file`package.json`
         kernel.generatePackageJSON(root, inputData);
 
+        // Generate file`clean-code-snippets.code-snippets`
+        kernel.generateCodeSnippets(root);
+
         // Generate file`README.md`
         kernel.generateREADME(root);
 
@@ -47,6 +50,7 @@ exports.generateProjectStructure = function (root, inputData) {
         return 0;
     } catch (err) {
         console.log(error('❌ ' + utils.ErrorHandle.getErrorMessage(err)));
+        console.log(`Error: ${err}`);
         return 1;
     }
 }
@@ -130,7 +134,7 @@ exports.generateKernelFiles = function (root, inputData, cb) {
                                     console.log(info('\n🤹🏼‍ Generating Routes . . . '));
 
                                     // Generate Routes index
-                                    let routeIndex = "var sysRoute = require('./system');\n";
+                                    let routeIndex = "var Middleware = require('../utils/Middleware');\nvar sysRoute = require('./system');\n";
 
                                     _.each(collections, (colName) => {
                                         routeIndex += "var " + utils.String.toProperCase(colName) + " = require('./" + colName + "');\n";
@@ -144,15 +148,16 @@ exports.generateKernelFiles = function (root, inputData, cb) {
                                     routeIndex += "\t//#region System route\n"
                                     routeIndex += "\tapp.post('/system/decode', sysRoute.decode);\n"
                                     routeIndex += "\tapp.post('/oauth', sysRoute.oauth);\n"
+                                    routeIndex += "\t// app.post('/APIwithToken', Middleware.authorized, sysRoute.oauth);\n"
 
                                     _.each(collections, (colName) => {
                                         routeIndex += "\n\t//#region " + utils.String.toProperCase(colName) + " route\n"
 
-                                        routeIndex += "\tapp.post('/" + colName + "/getAll', " + utils.String.toProperCase(colName) + ".getAll);\n";
-                                        routeIndex += "\tapp.post('/" + colName + "/getById', " + utils.String.toProperCase(colName) + ".getById);\n";
-                                        routeIndex += "\tapp.post('/" + colName + "/create', " + utils.String.toProperCase(colName) + ".create);\n";
-                                        routeIndex += "\tapp.post('/" + colName + "/update', " + utils.String.toProperCase(colName) + ".update);\n";
-                                        routeIndex += "\tapp.post('/" + colName + "/delete', " + utils.String.toProperCase(colName) + ".delete);\n";
+                                        routeIndex += "\tapp.get('/" + colName + "/getAll', Middleware.authorized, " + utils.String.toProperCase(colName) + ".getAll);\n";
+                                        routeIndex += "\tapp.get('/" + colName + "/getById', Middleware.authorized, " + utils.String.toProperCase(colName) + ".getById);\n";
+                                        routeIndex += "\tapp.post('/" + colName + "/create', Middleware.authorized, " + utils.String.toProperCase(colName) + ".create);\n";
+                                        routeIndex += "\tapp.put('/" + colName + "/update', Middleware.authorized, " + utils.String.toProperCase(colName) + ".update);\n";
+                                        routeIndex += "\tapp.delete('/" + colName + "/delete', Middleware.authorized, " + utils.String.toProperCase(colName) + ".delete);\n";
                                     })
                                     routeIndex += "}"
 
