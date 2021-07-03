@@ -27,6 +27,9 @@ exports.generateProjectStructure = function (root, inputData) {
         // Generate file`package.json`
         kernel.generatePackageJSON(root, inputData);
 
+        // Generate file`clean-code-snippets.code-snippets`
+        kernel.generateCodeSnippets(root);
+
         // Generate file`README.md`
         kernel.generateREADME(root);
 
@@ -47,6 +50,7 @@ exports.generateProjectStructure = function (root, inputData) {
         return 0;
     } catch (err) {
         console.log(error('❌ ' + utils.ErrorHandle.getErrorMessage(err)));
+        console.log(`Error: ${err}`);
         return 1;
     }
 }

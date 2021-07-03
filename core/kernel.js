@@ -72,6 +72,17 @@ exports.generatePackageJSON = (root, projectInfo) => {
     }
 }
 
+exports.generateCodeSnippets = (root) => {
+    try {
+        fs.mkdirSync(root + '/.vscode');
+        let snippetsData = fs.readFileSync(__dirname + '/template/clean-code-snippets.code-snippets');
+        fs.writeFileSync(root + '/.vscode/clean-code-snippets.code-snippets', snippetsData);
+        console.log(success('✅ Generate `clean-code-snippets.code-snippets` file successfully --> Next !!!'));
+    } catch (err) {
+        throw err;
+    }
+}
+
 exports.generateREADME = (root) => {
     try {
         let readmeData = fs.readFileSync(__dirname + '/template/README.md');
