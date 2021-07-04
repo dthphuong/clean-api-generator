@@ -44,6 +44,43 @@
 		"description": "Foreach Loop"
 	},
 	// FPO Clean Code Blocks
+	"New completely Entity": {
+		"prefix": "fpo.new_completely_entity",
+		"scope": "javascript",
+		"body": [
+			"var mongoose = require('mongoose');",
+			"(Schema = mongoose.Schema), (ObjectId = Schema.ObjectId);",
+			"",
+			"var SchemaTypes = mongoose.Schema.Types;",
+			"",
+			"// Create a Mongoose Schema",
+			"var ${1:Users}Schema = new Schema({",
+			"\t_user: ObjectId,",
+			"\tcreatedAt: { type: Date, default: () => { return new Date() } },",
+			"\tcreatedBy: ObjectId,",
+			"\tupdatedAt: { type: Date, default: () => { return new Date() } },",
+			"\tupdatedBy: ObjectId",
+			"}, {",
+			"\tversionKey: false,",
+			"\tcollation: { locale: 'vi' }",
+			"});",
+			"",
+			"// Register the schema",
+			"exports.${1:Users}Entity = mongoose.model(\"${1:Users}Entity\", ${1:Users}Schema, \"${2:users}\");"
+		],
+		"description": "Create new completely Entity in file `./core/entity/<entity_name>.js`"
+	},
+	"New Created/Updated fields in Entity": {
+		"prefix": "fpo.new_created_updated_entity",
+		"scope": "javascript",
+		"body": [
+			"createdAt: { type: Date, default: () => { return new Date() } },",
+			"createdBy: ObjectId,",
+			"updatedAt: { type: Date, default: () => { return new Date() } },",
+			"updatedBy: ObjectId"
+		],
+		"description": "Create new Created/Updated fields in Entity in file `./core/entity/<entity_name>.js`"
+	},
 	"New CRUD API routes": {
 		"prefix": "fpo.new_crud_routes",
 		"scope": "javascript",
@@ -140,7 +177,7 @@
 			"\t\t\t})",
 			"\t\t})",
 			"\t\t.catch(err => {",
-			"\t\t\tconsole.log('${3:terms}_DataProvider_${1:getAll}: ' + err);",
+			"\t\t\tconsole.log('${3:users}_DataProvider_${1:getAll}: ' + err);",
 			"\t\t\tcb(err, null)",
 			"\t\t})",
 			"}"
