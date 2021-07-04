@@ -1,0 +1,187 @@
+{
+	// Code comments
+	"NodeJS header": {
+		"prefix": "fpo.welcome",
+		"scope": "javascript",
+		"body": [
+			"/*",
+			" * Author: ${1:Phuong Duong} - ${2:FPO Co.,Ltd}",
+			" * Email: ${3:phuongduong@fpo.vn}",
+			" * Created on $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND - $CURRENT_DATE/$CURRENT_MONTH/$CURRENT_YEAR",
+			" */"
+		],
+		"description": "Give you a header for your javascript file"
+	},
+	// Code Log
+	"Fast console log": {
+		"prefix": "fpo.log",
+		"scope": "javascript",
+		"body": [
+			"console.log(`${1:messgae}: ${${2:variable}}`);"
+		],
+		"description": "Log output to console"
+	},
+	// Code Blocks
+	"For Loop": {
+		"prefix": "fpo.for_loop",
+		"scope": "javascript",
+		"body": [
+			"for (var ${1:index} = 0; ${1:index} < ${2:array}.length; ${1:index}++) {",
+			"\tvar ${3:element} = ${2:array}[${1:index}];",
+			"\t$0",
+			"}"
+		],
+		"description": "For Loop"
+	},
+	"ForEach Loop": {
+		"prefix": "fpo.foreach_loop",
+		"scope": "javascript",
+		"body": [
+			"${1:array}.forEach(${2:element} => {",
+			"\t// do something in foreach loop",
+			"});"
+		],
+		"description": "Foreach Loop"
+	},
+	// FPO Clean Code Blocks
+	"New completely Entity": {
+		"prefix": "fpo.new_completely_entity",
+		"scope": "javascript",
+		"body": [
+			"var mongoose = require('mongoose');",
+			"(Schema = mongoose.Schema), (ObjectId = Schema.ObjectId);",
+			"",
+			"var SchemaTypes = mongoose.Schema.Types;",
+			"",
+			"// Create a Mongoose Schema",
+			"var ${1:Users}Schema = new Schema({",
+			"\t_user: ObjectId,",
+			"\tcreatedAt: { type: Date, default: () => { return new Date() } },",
+			"\tcreatedBy: ObjectId,",
+			"\tupdatedAt: { type: Date, default: () => { return new Date() } },",
+			"\tupdatedBy: ObjectId",
+			"}, {",
+			"\tversionKey: false,",
+			"\tcollation: { locale: 'vi' }",
+			"});",
+			"",
+			"// Register the schema",
+			"exports.${1:Users}Entity = mongoose.model(\"${1:Users}Entity\", ${1:Users}Schema, \"${2:users}\");"
+		],
+		"description": "Create new completely Entity in file `./core/entity/<entity_name>.js`"
+	},
+	"New Created/Updated fields in Entity": {
+		"prefix": "fpo.new_created_updated_entity",
+		"scope": "javascript",
+		"body": [
+			"createdAt: { type: Date, default: () => { return new Date() } },",
+			"createdBy: ObjectId,",
+			"updatedAt: { type: Date, default: () => { return new Date() } },",
+			"updatedBy: ObjectId"
+		],
+		"description": "Create new Created/Updated fields in Entity in file `./core/entity/<entity_name>.js`"
+	},
+	"New CRUD API routes": {
+		"prefix": "fpo.new_crud_routes",
+		"scope": "javascript",
+		"body": [
+			"//#region ${2:User} route",
+			"app.get('/${1:users}/getAll', ${3:Middleware.authorized,} ${2:User}.getAll);",
+			"app.get('/${1:users}/getById', ${3:Middleware.authorized,} ${2:User}.getById);",
+			"app.post('/${1:users}/create', ${3:Middleware.authorized,} ${2:User}.create);",
+			"app.put('/${1:users}/update', ${3:Middleware.authorized,} ${2:User}.update);",
+			"app.delete('/${1:users}/delete', ${3:Middleware.authorized,} ${2:User}.delete);"
+		],
+		"description": "Create new combo CRUD for API routes in file `./routes/index.js`"
+	},
+	"New API route": {
+		"prefix": "fpo.new_route",
+		"scope": "javascript",
+		"body": [
+			"app.${1:get}('/${2:users}/${3:getAll}', ${5:Middleware.authorized,} ${4:User}.${3:getAll})",
+		],
+		"description": "Create single API route in file `./routes/index.js`"
+	},
+	"New route method": {
+		"prefix": "fpo.new_route_method",
+		"scope": "javascript",
+		"body": [
+			"exports.${1:getAll} = function (req, res, next) {",
+			"\tvar ${2:data} = req.myParams;",
+			"",
+			"\tUseCase.${1:getAll}(${2:data}, function (err, result) {",
+			"\t\tif (err) {",
+			"\t\t\treturn res.send({",
+			"\t\t\t\texitcode: utils.ErrorHandle.getErrorCode(err),",
+			"\t\t\t\tdata: ${3:[]},",
+			"\t\t\t\tmessage: utils.ErrorHandle.getErrorMessage(err) + ': ' + err",
+			"\t\t\t})",
+			"\t\t}",
+			"\t\treturn res.send({",
+			"\t\t\texitcode: 1,",
+			"\t\t\tdata: result,",
+			"\t\t\tmessage: '${4:Get all items successful}'",
+			"\t\t})",
+			"\t})",
+			"}"
+		],
+		"description": "Create route method in file `./routes/<entity_name>.js"
+	},
+	"New Usecase method": {
+		"prefix": "fpo.new_usecase_method",
+		"scope": "javascript",
+		"body": [
+			"exports.${1:getAll} = function (${2:data}, cb) {",
+			"\tDataProvider.${1:getAll}(${2:data}, cb);",
+			"}"
+		],
+		"description": "Create Usecase method in file `./core/use_case/<entity_name>.js"
+	},
+	"New DataProvider method": {
+		"prefix": "fpo.new_dataprovide_method",
+		"scope": "javascript",
+		"body": [
+			"exports.${1:getAll} = function (data, cb) {",
+			"\tMongoConnect.Connect(config.database.name)",
+			"\t\t.then(db => {",
+			"\t\t\tvar queryBuilder = new QueryBuilder([",
+			"\t\t\t\t['$match', 'isDeleted', false, '$and'],",
+			"\t\t\t\t['$match', data.cols, data.q, '$or'],",
+			"\t\t\t\t['$sort', data.sBy, data.sType],",
+			"\t\t\t])",
+			"",
+			"\t\t\t// console.log(queryBuilder.getQuery());",
+			"",
+			"\t\t\tEntity.${2:Users}Entity.aggregate([{",
+			"\t\t\t\t$facet: {",
+			"\t\t\t\t\tallData: queryBuilder.getQuery(),",
+			"\t\t\t\t\tdataWithLimit: queryBuilder.getQuery().concat(utils.QueryDict.LimitOffset(data.nSkip, data.nLimit))",
+			"\t\t\t\t}",
+			"\t\t\t}], (err, result) => {",
+			"\t\t\t\tif (err) {",
+			"\t\t\t\t\tcb(err, null)",
+			"\t\t\t\t} else {",
+			"\t\t\t\t\tresult = result[0]",
+			"\t\t\t\t\tif (!_.isEmpty(result.dataWithLimit)) {",
+			"\t\t\t\t\t\tlet n${2:Users} = _.size(result.allData)",
+			"",
+			"\t\t\t\t\t\tcb(null, {",
+			"\t\t\t\t\t\t\tnItems: n${2:Users},",
+			"\t\t\t\t\t\t\tnPages: Math.floor(n${2:Users} / data.nLimit) + (n${2:Users} % data.nLimit != 0),",
+			"\t\t\t\t\t\t\tdata: result.dataWithLimit",
+			"\t\t\t\t\t\t})",
+			"\t\t\t\t\t} else {",
+			"\t\t\t\t\t\tcb(2, null)",
+			"\t\t\t\t\t}",
+			"\t\t\t\t}",
+			"\t\t\t})",
+			"\t\t})",
+			"\t\t.catch(err => {",
+			"\t\t\tconsole.log('${3:users}_DataProvider_${1:getAll}: ' + err);",
+			"\t\t\tcb(err, null)",
+			"\t\t})",
+			"}"
+		],
+		"description": "Create DataProvider method in file `./data_provider/<entity_name>.js"
+	},
+}
