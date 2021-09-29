@@ -1,6 +1,6 @@
-# CleanAPI Generator
-- Version: 2.0
-- Develop by FPO Co.,Ltd
+# CleanAPI Generator v2.0
+
+![CLeanAPI Generator v2.0](./cover.png "Project cover")
 
 ## 1. Description
 The powerful and flexible API framework which is used Node.JS, Express and based-on Clean architecture
