@@ -1,107 +1,106 @@
 /**
- * Created by FPO Co.,Ltd - Nov 2020
+ * Created by FPO Co.,Ltd - Sep 2021
  * Website: https://fpo.vn
  * Email: contact@fpo.vn
  */
-var UseCase = require('../core/use_case/___COLLECTION_NAME___'),
-    utils = require('../utils'),
-    config = require('../config'),
-    jwt = require('../utils/JWT'),
-    _ = require('underscore'),
-    crypto = require('crypto-js'),
-    fs = require('fs');
+const UseCase = require('../core/use_case/___COLLECTION_NAME___')
+const utils = require('../utils')
 
+exports.getAll = (req, res) => {
+  req.myParams.payload = req.payload.data
 
-exports.getAll = function (req, res, next) {
-    UseCase.getAll(function (err, result) {
-        if (err) {
-            return res.send({
-                exitcode: utils.ErrorHandle.getErrorCode(err),
-                data: [],
-                message: utils.ErrorHandle.getErrorMessage(err) + ': ' + err
-            })
-        }
-        return res.send({
-            exitcode: 1,
-            data: result,
-            message: 'Get all items successful'
-        })
+  UseCase.getAll(req.myParams, (err, result) => {
+    if (err) {
+      return res.send({
+        exitcode: utils.ErrorHandle.getErrorCode(err),
+        data: [],
+        message: utils.ErrorHandle.getErrorMessage(err) + ': ' + err,
+      })
+    }
+    return res.send({
+      exitcode: 1,
+      data: result,
+      message: 'Get all items successful',
     })
+  })
 }
 
+exports.getById = (req, res) => {
+  const { ___ID___ } = req.body
 
-exports.getById = function (req, res, next) {
-    var ___ID___ = req.body.___ID___
-    UseCase.getById(___ID___, function (err, result) {
-        if (err) {
-            return res.send({
-                exitcode: utils.ErrorHandle.getErrorCode(err),
-                data: {},
-                message: utils.ErrorHandle.getErrorMessage(err) + ': ' + err
-            })
-        }
-        return res.send({
-            exitcode: 1,
-            data: result,
-            message: 'Get item successful'
-        })
+  UseCase.getById(___ID___, function (err, result) {
+    if (err) {
+      return res.send({
+        exitcode: utils.ErrorHandle.getErrorCode(err),
+        data: {},
+        message: utils.ErrorHandle.getErrorMessage(err) + ': ' + err,
+      })
+    }
+    return res.send({
+      exitcode: 1,
+      data: result,
+      message: 'Get item successful',
     })
+  })
 }
 
-exports.create = function (req, res, next) {
-    var data = req.body;
-    UseCase.create(data, function (err, result) {
-        if (err) {
-            return res.send({
-                exitcode: utils.ErrorHandle.getErrorCode(err),
-                data: {},
-                message: utils.ErrorHandle.getErrorMessage(err) + ': ' + err
-            })
-        }
-        return res.send({
-            exitcode: 1,
-            data: {
-                ___ID___: result._id,
-            },
-            message: 'Create item successful',
-        });
+exports.create = (req, res) => {
+  const data = req.body
+
+  UseCase.create(data, function (err, result) {
+    if (err) {
+      return res.send({
+        exitcode: utils.ErrorHandle.getErrorCode(err),
+        data: {},
+        message: utils.ErrorHandle.getErrorMessage(err) + ': ' + err,
+      })
+    }
+    return res.send({
+      exitcode: 1,
+      data: {
+        _id: result._id,
+      },
+      message: 'Create item successful',
     })
+  })
 }
 
-exports.update = function (req, res, next) {
-    var ___COLLECTION_NAME___ = req.body;
-    UseCase.update(___COLLECTION_NAME___, function (err, result) {
-        if (err) {
-            return res.send({
-                exitcode: utils.ErrorHandle.getErrorCode(err),
-                data: {},
-                message: utils.ErrorHandle.getErrorMessage(err) + ': ' + err
-            })
-        }
-        return res.send({
-            exitcode: 1,
-            data: {
-                'nModified': result.nModified
-            },
-            message: 'Update item successful'
-        });
+exports.update = (req, res) => {
+  const ___COLLECTION_NAME___ = req.body
+
+  UseCase.update(___COLLECTION_NAME___, function (err, result) {
+    if (err) {
+      return res.send({
+        exitcode: utils.ErrorHandle.getErrorCode(err),
+        data: {},
+        message: utils.ErrorHandle.getErrorMessage(err) + ': ' + err,
+      })
+    }
+    return res.send({
+      exitcode: 1,
+      data: {
+        nModified: result.nModified,
+      },
+      message: 'Update item successful',
     })
+  })
 }
 
-exports.delete = function (req, res, next) {
-    var ___ID___ = req.body.___ID___;
-    UseCase.delete(___ID___, function (err, result) {
-        if (err) {
-            return res.send({
-                exitcode: utils.ErrorHandle.getErrorCode(err),
-                data: {},
-                message: utils.ErrorHandle.getErrorMessage(err) + ': ' + err
-            })
-        }
-        return res.send({
-            exitcode: 1,
-            data: {},
-            message: 'Delete item successful'
-        });
+exports.delete = (req, res) => {
+  const { ___ID___ } = req.body
+
+  UseCase.delete(___ID___, function (err, result) {
+    if (err) {
+      return res.send({
+        exitcode: utils.ErrorHandle.getErrorCode(err),
+        data: result,
+        message: utils.ErrorHandle.getErrorMessage(err) + ': ' + err,
+      })
+    }
+    return res.send({
+      exitcode: 1,
+      data: {},
+      message: 'Delete item successful',
     })
+  })
 }

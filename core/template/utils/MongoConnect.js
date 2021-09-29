@@ -1,50 +1,51 @@
 /**
- * Created by FPO Co.,Ltd - Nov 2020
+ * Created by FPO Co.,Ltd - Sep 2021
  * Website: https://fpo.vn
  * Email: contact@fpo.vn
  */
 'use strict'
 
-var mongoose = require('mongoose');
-global.config = require('../config');
+const mongoose = require('mongoose')
 
-var db;
+exports.Connect = function (dbName = process.env.DB_NAME) {
+  let db
 
-exports.Connect = function (dbName) {
-    return new Promise(function (resolve, reject) {
-        if (db) {
-            if (db.name == dbName) {
-                resolve(db);
-                return;
-            } else {
-                console.log('Close database [' + db.name + ']');
-                db.close();
-            }
-        }
-        mongoose.Promise = global.Promise;
+  return new Promise(function (resolve, reject) {
+    if (db) {
+      if (db.name == dbName) {
+        resolve(db)
+        return
+      } else {
+        console.log(`💤 Close database [${db.name}]`)
+        db.close()
+      }
+    }
+    mongoose.Promise = global.Promise
 
-        // create connection string
-        var connectionString = '';
-        if (config.database.username == '' || config.database.password == '') {
-            connectionString = 'mongodb://' + config.database.host + ':' + config.database.port + "/" + dbName + config.database.optional;
-        } else {
-            connectionString = 'mongodb://' + config.database.username + ':' + config.database.password + '@' +
-                config.database.host + ':' + config.database.port + "/" + dbName + config.database.optional;
-        }
+    // create connection string
+    let connectionString = ''
+    if (process.env.DB_USERNAME == '' || process.env.PASSWORD == '') {
+      connectionString = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${dbName}`
+    } else {
+      connectionString = `mongodb://${process.env.DB_USERNAME}:${process.env.PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${dbName}`
+    }
 
-        // connect to database
-        mongoose.connect(connectionString, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        })
-            .then(() => {
-                db = mongoose.connection;
-                console.log('MongoDb connection created to [' + db.name + ']');
-                resolve(db);
-            })
-            .catch(err => {
-                console.log('Error creating MongoDb connection: ' + err);
-                reject(err);
-            });
-    });
-};
+    // connect to database
+    mongoose
+      .connect(connectionString, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5 seconds
+        socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+      })
+      .then(() => {
+        db = mongoose.connection
+        console.log(`🎉 New connection created to [${db.name}]`)
+        resolve(db)
+      })
+      .catch((err) => {
+        console.log(`❌ Error creating MongoDb connection: ${err}`)
+        reject(err)
+      })
+  })
+}
