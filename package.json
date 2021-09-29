@@ -1,10 +1,11 @@
 {
   "name": "clean-api-generate",
   "version": "1.0.0",
-  "description": "The useful tool to generate RESTful API with Clean Architecture",
+  "description": "The powerful tool to generate RESTful API based-on Clean Architecture with NodeJS",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prettyme": "prettier --write \"./**/*.{js,jsx,json}\""
   },
   "repository": {
     "type": "git",
@@ -24,21 +25,34 @@
   },
   "homepage": "https://gitlab.com/fpo-project/clean-api-generate#readme",
   "dependencies": {
-    "async": "^3.2.0",
-    "chalk": "^2.4.2",
+    "async": "^3.2.1",
+    "chalk": "^4.1.2",
     "child_process": "^1.0.2",
     "express": "^4.17.1",
     "figlet": "^1.2.3",
-    "fs": "0.0.1-security",
     "mongodb": "^3.6.9",
-    "mongoose": "^5.5.13",
-    "mongoose-double": "0.0.1",
+    "mongoose": "^6.0.7",
     "npm": "^6.14.7",
-    "request": "^2.88.0",
     "require": "^2.4.20",
     "type-of-is": "^3.5.1",
     "underscore": "^1.13.1",
     "url": "^0.11.0",
     "yargs": "^13.2.4"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.1.2",
+    "prettier": "^2.4.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,md}": [
+      "prettier --write"
+    ]
   }
 }
